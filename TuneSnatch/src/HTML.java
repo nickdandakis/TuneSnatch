@@ -1,5 +1,11 @@
+import java.io.IOException;
 
-public class HTML {
+
+public class HTML implements java.io.Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7381759251822881043L;
 	private String SITE_URL;
 	private String AREA;
 	private int PAGENUM;
@@ -40,5 +46,9 @@ public class HTML {
 
 	public void setCOMPLETE_URL(String COMPLETE_URL) {
 		this.COMPLETE_URL = COMPLETE_URL;
+	}
+
+	public Object getDoc() throws IOException {
+		return null;
 	}
 }

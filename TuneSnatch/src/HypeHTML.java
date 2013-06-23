@@ -6,6 +6,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class HypeHTML extends HTML {
+
+	private static final long serialVersionUID = 106075426457023929L;
 	private Map<String, String> COOKIES;
 	
 	public HypeHTML(String area, int pagenum){

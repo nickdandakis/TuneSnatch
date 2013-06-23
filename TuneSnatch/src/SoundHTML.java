@@ -8,6 +8,11 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class SoundHTML extends HTML {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5589093030331078854L;
+
 	public SoundHTML(String AREA, int PAGENUM) {
 		super(AREA, PAGENUM);
 		setSITE_URL("https://soundcloud.com/");

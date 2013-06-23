@@ -27,8 +27,53 @@ public class Downloader {
 		String strs[] = res.parse().toString().split("&quot;");
 		return strs[11].replaceAll("\\\\", "");
 	}
+	
+	private long getFilesize(Track track) throws IOException{
+		String url = null;
+		
+		if(track.getClass() == HypeTrack.class){
+			COOKIES = ((HypeTrack) track).getCOOKIES();
+			url = computeDownloadURL((HypeTrack) track);
+			
+		} else if(track.getClass() == SoundTrack.class){
+			url = ((SoundTrack) track).getSTREAMURL();
+		}
+		
+		URLConnection conn = new URL(url).openConnection();
+	    
+	    return conn.getContentLength();
+	}
+	
+	private boolean isDownloaded(Track track){
+		File dir = new File(".");
+		File[] files = dir.listFiles();
+		
+		for(File file : files){
+			try {
+				if(file.getName().equalsIgnoreCase(track.getARTIST() + " - " + track.getSONG() + ".mp3") && 
+						file.length() == getFilesize(track))
+					return true;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
+	public void downloadTracklist(TrackList tracklist){
+		for(int i=0; i<tracklist.getSize(); i++){
+			try {
+				if(!isDownloaded(tracklist.getTrack(i)))
+					downloadTrack(tracklist.getTrack(i));
+				else
+					System.out.println(tracklist.getTrack(i).getARTIST() + " - " + tracklist.getTrack(i).getSONG() + " already downloaded");
+			} catch (IOException e) {
+				System.out.println("Invalid HTTP request");
+			}
+		}
+	}
 
-	public void download(Track track) throws IOException{
+	public void downloadTrack(Track track) throws IOException{
 		String url = null;
 		
 		if(track.getClass() == HypeTrack.class){
