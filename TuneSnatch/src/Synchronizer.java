@@ -55,13 +55,11 @@ public class Synchronizer {
 	}
 	
 	public void printSyncData(){
-		try {
-			for(HTML html : syncdata){
-				System.out.println(html.getCOMPLETE_URL());
-			}
-		} catch (NullPointerException e) {
-			System.out.println("Not keeping track of anything. ");
+		for(HTML html : syncdata){
+			System.out.println(html.getCOMPLETE_URL());
 		}
+		if(syncdata.size() == 0)
+			System.out.println("Not keeping track of anything. ");
 	}
 	
 	public void clearSyncData(){

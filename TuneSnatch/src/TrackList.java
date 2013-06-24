@@ -84,13 +84,19 @@ public class TrackList {
 			String trackString, username, song, streamUrl, waveformUrl, id;
 			
 			for(int i = countSubstring("window.SC.bufferTracks.push", htmlstring); i>0; i--){
-				trackString = scanner.findWithinHorizon("window.SC.bufferTracks.push[^;]+", 0);
+				trackString = scanner.findWithinHorizon("window.SC.bufferTracks.push\\(\\{[^<]+", 0);
+//				System.out.println(trackString);
 				
 				id = filter(trackString, FilterKey.SoundCloud_id);
+//				System.out.println("id: " + id);
 				username = filter(trackString, FilterKey.SoundCloud_username);
+//				System.out.println("username: " + username);
 				song = filter(trackString, FilterKey.SoundCloud_song);
+//				System.out.println("song: " + song);
 				streamUrl = filter(trackString, FilterKey.SoundCloud_streamUrl);
+//				System.out.println("streamurl: " + streamUrl);
 				waveformUrl = filter(trackString, FilterKey.SoundCloud_waveformUrl);
+//				System.out.println("waveformurl: " + waveformUrl);
 				
 				tracks.add(new SoundTrack(id, username, song, streamUrl, waveformUrl));
 			}

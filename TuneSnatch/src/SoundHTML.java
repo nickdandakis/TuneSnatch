@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -17,6 +20,17 @@ public class SoundHTML extends HTML {
 		super(AREA, PAGENUM);
 		setSITE_URL("https://soundcloud.com/");
 		setCOMPLETE_URL(getSITE_URL() + getAREA() + "?format=html&page=" + getPAGENUM() + "/");
+	}
+	
+	public void saveDoc(){
+		File htmlFile = new File("." + File.separator + "SoundCtest.html");
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(htmlFile.getAbsoluteFile()));
+			bw.write(getDoc());
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getDoc() throws FailingHttpStatusCodeException, MalformedURLException, IOException{

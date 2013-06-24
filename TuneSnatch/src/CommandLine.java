@@ -24,7 +24,7 @@ public class CommandLine {
 		System.out.println("ls -insync");
 		System.out.println("ls -newtracks");
 		System.out.println("clear insync");
-		System.out.println("clear");
+		System.out.println("cls");
 		System.out.println("exit");
 		System.out.println("\nNumber of pages == 0 means all pages.\n<SITE> == HypeMachine || SoundCloud (case-sensitive) \n");
 		System.out.println("For HypeMachine: <AREA/SUBAREA> == popular || <USERNAME>");
@@ -49,7 +49,7 @@ public class CommandLine {
 					System.exit(0);
 				if(args[0].equalsIgnoreCase("help"))
 					printHelp();
-				if(args[0].equalsIgnoreCase("clear"))
+				if(args[0].equalsIgnoreCase("cls"))
 					clear();
 				if(args[0].equalsIgnoreCase("pull"))
 					pull();

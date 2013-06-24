@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 
@@ -22,6 +25,17 @@ public class HypeHTML extends HTML {
 	
 	public Map<String,String> getCOOKIES(){
 		return COOKIES;
+	}
+	
+	public void saveDoc(){
+		File htmlFile = new File("." + File.separator + "hypeMTest.html");
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(htmlFile.getAbsoluteFile()));
+			bw.write(getDoc().toString());
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Document getDoc() throws IOException{
