@@ -64,6 +64,7 @@ public class Synchronizer {
 	
 	public void clearSyncData(){
 		syncdata = new ArrayList<HTML>();
+		saveSyncData();
 	}
 	
 	private static String defaultDirectory() {

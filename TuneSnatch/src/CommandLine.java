@@ -21,6 +21,7 @@ public class CommandLine {
 		System.out.println("List of commands:");
 		System.out.println("download <SITE> <AREA/SUBAREA> <PAGES>");
 		System.out.println("sync <SITE> <AREA/SUBAREA> <PAGES>");
+		System.out.println("unsync <SITE> <AREA/SUBAREA> <PAGES>");
 		System.out.println("ls -insync");
 		System.out.println("ls -newtracks");
 		System.out.println("clear insync");
@@ -61,14 +62,12 @@ public class CommandLine {
 				if(args[0].equalsIgnoreCase("clear") && args[1].contains("insync"))
 					sz.clearSyncData();
 			} else if(args.length == 4){
-				if(args[0].equalsIgnoreCase("download") && args[1].equalsIgnoreCase("HypeMachine"))
-					download("HypeMachine", args[2], args[3]);
-				if(args[0].equalsIgnoreCase("download") && args[1].equalsIgnoreCase("SoundCloud"))
-					download("SoundCloud", args[2], args[3]);
-				if(args[0].equalsIgnoreCase("sync") && args[1].equalsIgnoreCase("HypeMachine"))
-					sync("HypeMachine", args[2], args[3]);
-				if(args[0].equalsIgnoreCase("sync") && args[1].equalsIgnoreCase("SoundCloud"))
-					sync("SoundCloud", args[2], args[3]);
+				if(args[0].equalsIgnoreCase("download"))
+					download(args[1], args[2], args[3]);
+				if(args[0].equalsIgnoreCase("sync"))
+					sync(args[1], args[2], args[3]);
+				if(args[0].equalsIgnoreCase("unsync"))
+					unsync(args[1], args[2], args[3]);
 			} 
 		}
 	}
@@ -127,20 +126,26 @@ public class CommandLine {
 				sz.addHTML(html);
 			}
 		} else {
-			try {
-				for(int i=1; ; i++){
-					if(site.equalsIgnoreCase("HypeMachine"))
-						html = new HypeHTML(area, i);
-					else if(site.equalsIgnoreCase("SoundCloud"))
-						html = new SoundHTML(area, i);
-					
-					if(html.getDoc().toString().length() < 35000) 
-						break;
-					sz.addHTML(html);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			if(site.equalsIgnoreCase("HypeMachine"))
+				html = new HypeHTML(area, pages);
+			else if(site.equalsIgnoreCase("SoundCloud"))
+				html = new SoundHTML(area, pages);
+			
+			sz.addHTML(html);
+		}
+	}
+	
+	private void unsync(String site, String area, String page){
+		int pages = Integer.parseInt(page);
+		
+		for(HTML html : sz.getSyncdata()){
+			if(html.getAREA().equalsIgnoreCase(area) && html.getPAGENUM() == pages &&
+					((site.equalsIgnoreCase("HypeMachine") && html instanceof HypeHTML) ||
+							(site.equalsIgnoreCase("SoundCloud") && html instanceof SoundHTML))){
+				sz.removeHTML(html);
+				break;
 			}
+				
 		}
 	}
 	

@@ -7,8 +7,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
 
-import org.jsoup.Jsoup;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
 
 
 public class Downloader {
@@ -94,11 +95,20 @@ public class Downloader {
 	    double speed = 0;
 	    float totalDataWritten = 0;
 	    float percentage = 0;
-	    String filename = track.getARTIST() + " - " + track.getSONG() + ".mp3";
+	    String unicodeFilename = track.getARTIST() + " - " + track.getSONG() + ".mp3";
+//	    String normalizedFilename = Normalizer.normalize(unicodeFilename, Normalizer.Form.NFKD);
+//	    String unicodeRegex = Pattern.quote("[\\p{InCombiningDiacriticalMarks}\\p{IsLm}\\p{IsSk}]+");
+//	    String filename = new String(normalizedFilename.replaceAll(unicodeRegex, "").getBytes("ascii"), "ascii");
+	    String filename = StringEscapeUtils.unescapeHtml4(unicodeFilename).replaceAll("[^\\x20-\\x7e]", "");
+	    
+//	    System.out.println(unicodeFilename);
+//	    System.out.println(normalizedFilename);
+	    System.out.println(StringEscapeUtils.unescapeHtml4(unicodeFilename).replaceAll("[^\\x20-\\x7e]", ""));
+	    
 	    int exp = (int) (Math.log(conn.getContentLength()) / Math.log(1000));
 	    String tracksize = String.format("%.2f", conn.getContentLength() / Math.pow(1000, exp));
 	    
-	    OutputStream outstream = new FileOutputStream(new File("." + File.separator + filename));
+	    OutputStream outstream = new FileOutputStream(new File("." + File.separator + StringEscapeUtils.unescapeHtml4(unicodeFilename).replaceAll("[^\\x20-\\x7e]", "")));
 	    byte[] buffer = new byte[8192];
 	    int len;
 	    System.out.println("Downloading " + filename + " [" + (tracksize) + " MB]");
