@@ -4,10 +4,14 @@ import java.util.Scanner;
 
 
 public class CommandLine {
-	
+	// System Input Scanner object
 	Scanner in = new Scanner(new InputStreamReader(System.in));
 	private Synchronizer sz;
 	
+	/**
+	 * Constructor for CommandLine object.
+	 * Initializes Synchronizer object and restores SyncData from file
+	 */
 	public CommandLine() {
 		sz = new Synchronizer();
 		sz.restoreSyncData();
@@ -18,6 +22,8 @@ public class CommandLine {
 	}
 	
 	private void printHelp(){
+		// Print out for help
+		// [FIX]: Make more user friendly and comprehensible
 		System.out.println("List of commands:");
 		System.out.println("download <SITE> <AREA/SUBAREA> <PAGES>");
 		System.out.println("sync <SITE> <AREA/SUBAREA> <PAGES>");
@@ -32,11 +38,21 @@ public class CommandLine {
 		System.out.println("For SoundCloud: <AREA/SUBAREA> == <USERNAME>/[favorites || tracks]");
 	}
 	
+	/*
+	 * aka main() for this CommandLine object
+	 */
 	public void launch(){
+		// Little launch message
 		System.out.println("TuneSnatch - Grounding your favorite tunes in the cloud!");
 		System.out.println("Synchronize HypeMachine and SoundCloud");
 		System.out.println("(hint: Type help for a list of commands)");
 		
+		/*
+		 * Main loop; Parses input from System.in after each line break (ie when user hits the return/enter key)
+		 * Splits arguments with a single space character as a delimiter
+		 * Arguments are an array of Strings
+		 * Then checks number of arguments and executes recognized commands
+		 */
 		for(prompt(); in.hasNextLine(); prompt()){
 			String line = in.nextLine().replaceAll("\n", "");
 			
@@ -72,6 +88,10 @@ public class CommandLine {
 		}
 	}
 
+	/*
+	 * Downloads all tracks from site/area and page(s) passed through.
+	 * 0 pages means to download all tracks from all pages.
+	 */
 	private void download(String site, String area, String page) {
 		int pages = Integer.parseInt(page);
 		TrackList tracklist = new TrackList();
@@ -100,7 +120,7 @@ public class CommandLine {
 					else if(site.equalsIgnoreCase("SoundCloud"))
 						html = new SoundHTML(area, i);
 
-					if(html.getDoc().toString().length() < 35000) 
+					if(html.getDoc().toString().length() < 35000) // [FIX]: Doesn't work for SoundCloud anymore. Check for same tracks on next page as well.
 						break;
 					tracklist.addTracks(html);
 					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getAREA());
@@ -112,7 +132,9 @@ public class CommandLine {
 
 		dw.downloadTracklist(tracklist);
 	}
-	
+	/*
+	 * Adds site/area and page(s) into the sync list.
+	 */
 	private void sync(String site, String area, String page){
 		int pages = Integer.parseInt(page);
 		HTML html = null;
@@ -135,6 +157,9 @@ public class CommandLine {
 		}
 	}
 	
+	/*
+	 * Removes site/area and pages from the sync list
+	 */
 	private void unsync(String site, String area, String page){
 		int pages = Integer.parseInt(page);
 		
@@ -149,6 +174,10 @@ public class CommandLine {
 		}
 	}
 	
+	/*
+	 * Downloads new tracks from site(s)/area(s) in sync list.
+	 * Downloader object avoids downloading already downloaded tracks.
+	 */
 	private void pull(){
 		Downloader dw = new Downloader();
 		TrackList tracklist = new TrackList();
@@ -164,14 +193,18 @@ public class CommandLine {
 		dw.downloadTracklist(tracklist);
 	}
 	
+	/*
+	 * NOT YET IMPLEMENTED!
+	 */
 	private void printNewtracks() {
 		System.out.println("IMMA PRINT ALL DA TRACKS!");
 	}
-
+	
 	private void printInsync() {
 		sz.printSyncData();
 	}
 	
+	// [FIX]: Doesn't work for Windows! 
 	private void clear(){
 		final String ESC = "\033[";
 		System.out.print(ESC + "2J"); 
