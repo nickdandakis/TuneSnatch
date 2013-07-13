@@ -14,4 +14,16 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/org</name>
+			<type>2</type>
+			<locationURI>PROJECT_LOC/org</locationURI>
+		</link>
+		<link>
+			<name>src/radams</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/java-gracenote/radams</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

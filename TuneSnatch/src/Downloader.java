@@ -18,7 +18,6 @@ public class Downloader {
 	private Map<String, String> COOKIES;
 	
 	public Downloader() {
-		
 	}
 	
 	private String computeDownloadURL(HypeTrack track) throws IOException{
@@ -129,7 +128,4 @@ public class Downloader {
 	    System.out.println("");
 	    outstream.close();
 	}
-
-	
-	
 }

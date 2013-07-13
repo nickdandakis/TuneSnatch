@@ -1,27 +1,16 @@
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 
-public class Synchronizer {
+public class Synchronizer extends UserProfile{
 
 	private ArrayList<HTML> syncdata = new ArrayList<HTML>();
-	private String DIR;
 	private File syncDataFile;
+	private UserProfile USERPROFILE;
 	
 	public Synchronizer() {
-		File datadir = new File(defaultDirectory() + File.separator + ".TuneSnatch");
-		if(!datadir.exists()){
-			datadir.mkdir();
-		}
-		
-		DIR = datadir.getPath();
-		syncDataFile = new File(DIR + File.separator + "sync.dat");
+		USERPROFILE = new UserProfile();
+		syncDataFile = new File(USERPROFILE.getDATA_DIRECTORY() + File.separator + "sync.dat");
 	}
 
 	public ArrayList<HTML> getSyncdata() {
@@ -64,53 +53,25 @@ public class Synchronizer {
 	
 	public void clearSyncData(){
 		syncdata = new ArrayList<HTML>();
-		saveSyncData();
+		USERPROFILE.clearData(syncDataFile);
 	}
 	
-	private static String defaultDirectory() {
-	    String OS = System.getProperty("os.name").toUpperCase();
-	    if (OS.contains("WIN"))
-	        return System.getenv("APPDATA");
-	    else if (OS.contains("MAC"))
-	        return System.getProperty("user.home") + "/Library/Application "
-	                + "Support";
-	    else if (OS.contains("NUX"))
-	        return System.getProperty("user.home");
-	    return System.getProperty("user.dir");
-	}
-
-	@SuppressWarnings("unchecked")
 	public void restoreSyncData(){
 		System.out.println("Restoring sync'd");
+		ArrayList<?> restoredObject = (ArrayList<?>) USERPROFILE.restoreData(syncDataFile);
+		ArrayList<HTML> checked = new ArrayList<HTML>();
 		
-		try {
-			@SuppressWarnings("resource")
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(syncDataFile));
-			Object obj = ois.readObject();
-			
-			if(obj instanceof ArrayList<?>){
-				syncdata = (ArrayList<HTML>) obj;
+		if(restoredObject != null) {
+			for(Object obj : restoredObject){
+				if(obj instanceof HTML)
+					checked.add((HTML) obj);
 			}
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found, making it now.");
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			syncdata = checked;
 		}
 	}
 	
 	private void saveSyncData(){
-		try {
-			@SuppressWarnings("resource")
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(syncDataFile));
-			oos.writeObject(syncdata);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		USERPROFILE.saveData(syncdata, syncDataFile);
 	}
-	
 	
 }

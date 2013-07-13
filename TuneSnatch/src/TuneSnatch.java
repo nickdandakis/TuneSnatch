@@ -36,8 +36,8 @@ public class TuneSnatch {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		CommandLine cmd = new CommandLine();	
-		cmd.launch();
+//		CommandLine cmd = new CommandLine();	
+//		cmd.launch();
 //		try {
 //			test();
 //		} catch (IOException e) {
@@ -45,7 +45,7 @@ public class TuneSnatch {
 //		}
 		
 		/*
-		 * Mixcloud HTML scraping. Need to actually fully impletement this.
+		 * Mixcloud HTML scraping. Need to actually fully implement this.
 		 */
 //		Response res = Jsoup.connect("http://www.mixcloud.com/tag/guaba-beach-bar/").userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 //		File htmlFile = new File("." + File.separator + "mixcloudTest.html");
