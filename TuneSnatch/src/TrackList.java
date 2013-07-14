@@ -58,8 +58,8 @@ public class TrackList {
 	}
 	
 	public void addTracks(HTML html) throws IOException{
-		if(html.getClass() == HypeHTML.class){
-			Element trackList = ((HypeHTML) html).getDoc().getElementById("displayList-data");
+		if(html.getClass() == HypeMachineHTML.class){
+			Element trackList = ((HypeMachineHTML) html).getDoc().getElementById("displayList-data");
 			
 			String[] strs = trackList.toString().split("\\[\\{", 2);
 			strs = strs[1].split("}]",2);
@@ -75,10 +75,10 @@ public class TrackList {
 				song = filter(trackString, FilterKey.HypeMachine_song);
 				posturl = filter(trackString, FilterKey.HypeMachine_posturl);
 				
-				tracks.add(new HypeTrack(id, key, artist, song, posturl, ((HypeHTML) html).getCOOKIES()));
+				tracks.add(new HypeMachineTrack(id, key, artist, song, posturl, ((HypeMachineHTML) html).getCOOKIES()));
 			}		
-		} else if(html.getClass() == SoundHTML.class){
-			String htmlstring = ((SoundHTML) html).getDoc();
+		} else if(html.getClass() == SoundCloudHTML.class){
+			String htmlstring = ((SoundCloudHTML) html).getDoc();
 			
 			Scanner scanner = new Scanner(htmlstring);
 			String trackString, username, song, streamUrl, waveformUrl, id;
@@ -98,7 +98,7 @@ public class TrackList {
 				waveformUrl = filter(trackString, FilterKey.SoundCloud_waveformUrl);
 //				System.out.println("waveformurl: " + waveformUrl);
 				
-				tracks.add(new SoundTrack(id, username, song, streamUrl, waveformUrl));
+				tracks.add(new SoundCloudTrack(id, username, song, streamUrl, waveformUrl));
 			}
 		}
 		

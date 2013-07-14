@@ -12,8 +12,8 @@ public class TuneSnatch {
 	
 	public static void test() throws MalformedURLException, IOException{
 //		SoundHTML testHtml = new SoundHTML("nick-dandakis/favorites", 1);
-		HypeHTML popular1HTML = new HypeHTML("popular", 1);
-		HypeHTML popular2HTML = new HypeHTML("popular", 2);
+		HypeMachineHTML popular1HTML = new HypeMachineHTML("popular", 1);
+		HypeMachineHTML popular2HTML = new HypeMachineHTML("popular", 2);
 		TrackList tracklist = new TrackList();
 //		Downloader dw = new Downloader();
 		Synchronizer sz = new Synchronizer();
@@ -36,8 +36,8 @@ public class TuneSnatch {
 	}
 	
 	public static void main(String[] args) throws IOException {
-//		CommandLine cmd = new CommandLine();	
-//		cmd.launch();
+		CommandLine cmd = new CommandLine();	
+		cmd.launch();
 //		try {
 //			test();
 //		} catch (IOException e) {

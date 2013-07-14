@@ -8,6 +8,10 @@ import java.net.URLConnection;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.farng.mp3.MP3File;
+import org.farng.mp3.TagException;
+import org.farng.mp3.id3.ID3v1;
+import org.farng.mp3.id3.ID3v1_1;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 
@@ -20,7 +24,7 @@ public class Downloader {
 	public Downloader() {
 	}
 	
-	private String computeDownloadURL(HypeTrack track) throws IOException{
+	private String computeDownloadURL(HypeMachineTrack track) throws IOException{
 		String COMPLETE_URL = HYPEM_SERVE_URL + track.getID() + "/" + track.getKEY() + "/";
 		Response res = Jsoup.connect(COMPLETE_URL).ignoreContentType(true).cookies(COOKIES).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		
@@ -31,12 +35,12 @@ public class Downloader {
 	private long getFilesize(Track track) throws IOException{
 		String url = null;
 		
-		if(track.getClass() == HypeTrack.class){
-			COOKIES = ((HypeTrack) track).getCOOKIES();
-			url = computeDownloadURL((HypeTrack) track);
+		if(track.getClass() == HypeMachineTrack.class){
+			COOKIES = ((HypeMachineTrack) track).getCOOKIES();
+			url = computeDownloadURL((HypeMachineTrack) track);
 			
-		} else if(track.getClass() == SoundTrack.class){
-			url = ((SoundTrack) track).getSTREAMURL();
+		} else if(track.getClass() == SoundCloudTrack.class){
+			url = ((SoundCloudTrack) track).getSTREAMURL();
 		}
 		
 		URLConnection conn = new URL(url).openConnection();
@@ -76,12 +80,12 @@ public class Downloader {
 	public void downloadTrack(Track track) throws IOException{
 		String url = null;
 		
-		if(track.getClass() == HypeTrack.class){
-			COOKIES = ((HypeTrack) track).getCOOKIES();
-			url = computeDownloadURL((HypeTrack) track);
+		if(track.getClass() == HypeMachineTrack.class){
+			COOKIES = ((HypeMachineTrack) track).getCOOKIES();
+			url = computeDownloadURL((HypeMachineTrack) track);
 			
-		} else if(track.getClass() == SoundTrack.class){
-			url = ((SoundTrack) track).getSTREAMURL();
+		} else if(track.getClass() == SoundCloudTrack.class){
+			url = ((SoundCloudTrack) track).getSTREAMURL();
 		}
 		
 		URLConnection conn = new URL(url).openConnection();
@@ -95,19 +99,20 @@ public class Downloader {
 	    float totalDataWritten = 0;
 	    float percentage = 0;
 	    String unicodeFilename = track.getARTIST() + " - " + track.getSONG() + ".mp3";
-//	    String normalizedFilename = Normalizer.normalize(unicodeFilename, Normalizer.Form.NFKD);
-//	    String unicodeRegex = Pattern.quote("[\\p{InCombiningDiacriticalMarks}\\p{IsLm}\\p{IsSk}]+");
-//	    String filename = new String(normalizedFilename.replaceAll(unicodeRegex, "").getBytes("ascii"), "ascii");
+//	    String normalizedFilename = Normalizer.normalize(unicodeFilename, Normalizer.Form.NFKD);					NONE
+//	    String unicodeRegex = Pattern.quote("[\\p{InCombiningDiacriticalMarks}\\p{IsLm}\\p{IsSk}]+");				OF THIS SHIT
+//	    String filename = new String(normalizedFilename.replaceAll(unicodeRegex, "").getBytes("ascii"), "ascii");	WORKS.
 	    String filename = StringEscapeUtils.unescapeHtml4(unicodeFilename).replaceAll("[^\\x20-\\x7e]", "");
 	    
 //	    System.out.println(unicodeFilename);
 //	    System.out.println(normalizedFilename);
-	    System.out.println(StringEscapeUtils.unescapeHtml4(unicodeFilename).replaceAll("[^\\x20-\\x7e]", ""));
+	    System.out.println(StringEscapeUtils.unescapeHtml4(unicodeFilename).replaceAll("[^\\x20-\\x7e]", ""));		// OR THIS SHIT.
 	    
 	    int exp = (int) (Math.log(conn.getContentLength()) / Math.log(1000));
 	    String tracksize = String.format("%.2f", conn.getContentLength() / Math.pow(1000, exp));
+	    File trackFile = new File("." + File.separator + StringEscapeUtils.unescapeHtml4(unicodeFilename).replaceAll("[^\\x20-\\x7e]", ""));
 	    
-	    OutputStream outstream = new FileOutputStream(new File("." + File.separator + StringEscapeUtils.unescapeHtml4(unicodeFilename).replaceAll("[^\\x20-\\x7e]", "")));
+	    OutputStream outstream = new FileOutputStream(trackFile);
 	    byte[] buffer = new byte[8192];
 	    int len;
 	    System.out.println("Downloading " + filename + " [" + (tracksize) + " MB]");
@@ -126,6 +131,19 @@ public class Downloader {
 	        System.out.print("KB/s ");
 	    }
 	    System.out.println("");
+	    
+	    try {
+			MP3File trackMP3File = new MP3File(trackFile);
+			if(trackMP3File.hasID3v1Tag()){
+				ID3v1 id3v1Tag = trackMP3File.getID3v1Tag();
+				System.out.println(id3v1Tag.toString());
+			} else {
+				System.out.println("No ID3v1 tag");
+			}
+		} catch (TagException e) {
+			e.printStackTrace();
+		}
+	    
 	    outstream.close();
 	}
 }

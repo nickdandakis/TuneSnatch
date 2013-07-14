@@ -102,9 +102,9 @@ public class CommandLine {
 			try {
 				for(int i=1; i<=pages; i++){
 					if(site.equalsIgnoreCase("HypeMachine"))
-						html = new HypeHTML(area, i);
+						html = new HypeMachineHTML(area, i);
 					else if(site.equalsIgnoreCase("SoundCloud"))
-						html = new SoundHTML(area, i);
+						html = new SoundCloudHTML(area, i);
 					
 					tracklist.addTracks(html);
 					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getAREA());
@@ -116,9 +116,9 @@ public class CommandLine {
 			try {
 				for(int i=1; ; i++){
 					if(site.equalsIgnoreCase("HypeMachine"))
-						html = new HypeHTML(area, i);
+						html = new HypeMachineHTML(area, i);
 					else if(site.equalsIgnoreCase("SoundCloud"))
-						html = new SoundHTML(area, i);
+						html = new SoundCloudHTML(area, i);
 
 					if(html.getDoc().toString().length() < 35000) // [FIX]: Doesn't work for SoundCloud anymore. Check for same tracks on next page as well.
 						break;
@@ -142,16 +142,16 @@ public class CommandLine {
 		if(pages != 0){
 			for(int i=1; i<=pages; i++){
 				if(site.equalsIgnoreCase("HypeMachine"))
-					html = new HypeHTML(area, i);
+					html = new HypeMachineHTML(area, i);
 				else if(site.equalsIgnoreCase("SoundCloud"))
-					html = new SoundHTML(area, i);
+					html = new SoundCloudHTML(area, i);
 				sz.addHTML(html);
 			}
 		} else {
 			if(site.equalsIgnoreCase("HypeMachine"))
-				html = new HypeHTML(area, pages);
+				html = new HypeMachineHTML(area, pages);
 			else if(site.equalsIgnoreCase("SoundCloud"))
-				html = new SoundHTML(area, pages);
+				html = new SoundCloudHTML(area, pages);
 			
 			sz.addHTML(html);
 		}
@@ -165,8 +165,8 @@ public class CommandLine {
 		
 		for(HTML html : sz.getSyncdata()){
 			if(html.getAREA().equalsIgnoreCase(area) && html.getPAGENUM() == pages &&
-					((site.equalsIgnoreCase("HypeMachine") && html instanceof HypeHTML) ||
-							(site.equalsIgnoreCase("SoundCloud") && html instanceof SoundHTML))){
+					((site.equalsIgnoreCase("HypeMachine") && html instanceof HypeMachineHTML) ||
+							(site.equalsIgnoreCase("SoundCloud") && html instanceof SoundCloudHTML))){
 				sz.removeHTML(html);
 				break;
 			}
