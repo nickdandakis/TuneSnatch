@@ -6,8 +6,8 @@ public class HypeMachineTrack extends Track {
 	private String POSTURL;
 	private Map<String, String> COOKIES;
 	
-	public HypeMachineTrack(String ID, String KEY, String ARTIST, String SONG, String POSTURL, Map<String, String> COOKIES) {
-		super(ID, ARTIST, SONG);
+	public HypeMachineTrack(String ID, String KEY, String SONG, String ARTIST, String POSTURL, Map<String, String> COOKIES) {
+		super(ID, SONG, ARTIST);
 		setKEY(KEY);
 		setPOSTURL(POSTURL);
 		setCOOKIES(COOKIES);
@@ -39,6 +39,7 @@ public class HypeMachineTrack extends Track {
 
 	@Override
 	public String toString(){
-		return getID() + ", " + getKEY() + ", " + getARTIST() + ", " + getSONG() + ", " + getPOSTURL();
+		return String.format("id: %s\nkey: %s\ntitle: %s\nartist: %s\nposturl: %s", 
+								getID(), getKEY(), getSONG(), getARTIST(), getPOSTURL());
 	}
 }

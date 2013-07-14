@@ -5,7 +5,7 @@ public class Track {
 	private String SONG;
 	private String ARTIST;
 	
-	public Track(String ID, String ARTIST, String SONG) {
+	public Track(String ID, String SONG, String ARTIST) {
 		setID(ID);
 		setSONG(SONG);
 		setARTIST(ARTIST);

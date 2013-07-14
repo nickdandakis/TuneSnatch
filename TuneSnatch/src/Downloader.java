@@ -8,11 +8,11 @@ import java.net.URLConnection;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.farng.mp3.MP3File;
-import org.farng.mp3.TagException;
-import org.farng.mp3.id3.ID3v1;
-import org.farng.mp3.id3.ID3v1_1;
+//import org.farng.mp3.MP3File;
+//import org.farng.mp3.TagException;
+//import org.farng.mp3.id3.ID3v1;
 import org.jsoup.Connection.Response;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 
 
@@ -24,7 +24,7 @@ public class Downloader {
 	public Downloader() {
 	}
 	
-	private String computeDownloadURL(HypeMachineTrack track) throws IOException{
+	private String getHypeMachineTrackDownloadURL(HypeMachineTrack track) throws IOException{
 		String COMPLETE_URL = HYPEM_SERVE_URL + track.getID() + "/" + track.getKEY() + "/";
 		Response res = Jsoup.connect(COMPLETE_URL).ignoreContentType(true).cookies(COOKIES).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		
@@ -32,15 +32,44 @@ public class Downloader {
 		return strs[11].replaceAll("\\\\", "");
 	}
 	
+	private String getMixcloudTrackDownloadURL(MixcloudTrack track) throws IOException {
+		String downloadUrl = track.getPREVIEW_URL().replaceAll("previews", "cloudcasts/originals");
+		
+		try {
+			@SuppressWarnings("unused")
+			Response res = Jsoup.connect(downloadUrl).ignoreContentType(true).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
+			return downloadUrl;
+		} catch (HttpStatusException firstAttempt) {
+			int serversToCycle = 30;
+			for(int i=1; i<= serversToCycle; ){
+				try{
+					String cycledUrl = downloadUrl.replaceAll("stream[0-9]+", ("stream" + i));
+					
+					Response res = Jsoup.connect(cycledUrl).ignoreContentType(true).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
+					if(res.parse().toString().length() < 2000)
+						i++;
+					else 
+						return cycledUrl;
+				} catch (HttpStatusException cycledAttempt){
+					i++;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	private long getFilesize(Track track) throws IOException{
 		String url = null;
 		
 		if(track.getClass() == HypeMachineTrack.class){
 			COOKIES = ((HypeMachineTrack) track).getCOOKIES();
-			url = computeDownloadURL((HypeMachineTrack) track);
+			url = getHypeMachineTrackDownloadURL((HypeMachineTrack) track);
 			
 		} else if(track.getClass() == SoundCloudTrack.class){
 			url = ((SoundCloudTrack) track).getSTREAMURL();
+		} else if(track.getClass() == MixcloudTrack.class){
+			url = getMixcloudTrackDownloadURL((MixcloudTrack) track);
 		}
 		
 		URLConnection conn = new URL(url).openConnection();
@@ -82,10 +111,13 @@ public class Downloader {
 		
 		if(track.getClass() == HypeMachineTrack.class){
 			COOKIES = ((HypeMachineTrack) track).getCOOKIES();
-			url = computeDownloadURL((HypeMachineTrack) track);
+			url = getHypeMachineTrackDownloadURL((HypeMachineTrack) track);
 			
 		} else if(track.getClass() == SoundCloudTrack.class){
 			url = ((SoundCloudTrack) track).getSTREAMURL();
+		} else if(track.getClass() == MixcloudTrack.class){
+			url = getMixcloudTrackDownloadURL((MixcloudTrack) track);
+			System.out.println(url);
 		}
 		
 		URLConnection conn = new URL(url).openConnection();
@@ -124,7 +156,7 @@ public class Downloader {
 	        speed = NANOS_PER_SECOND / BYTES_PER_MIB * totalDataWritten / (System.nanoTime() - startTime + 1);
 	        String speedString = String.format("%.2f", speed); 
 	        
-	        System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+	        System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"); // Back, back, back dat ass up
 	        System.out.print((int) percentage);
 	        System.out.print("% ");
 	        System.out.print(speedString);
@@ -132,17 +164,17 @@ public class Downloader {
 	    }
 	    System.out.println("");
 	    
-	    try {
-			MP3File trackMP3File = new MP3File(trackFile);
-			if(trackMP3File.hasID3v1Tag()){
-				ID3v1 id3v1Tag = trackMP3File.getID3v1Tag();
-				System.out.println(id3v1Tag.toString());
-			} else {
-				System.out.println("No ID3v1 tag");
-			}
-		} catch (TagException e) {
-			e.printStackTrace();
-		}
+//	    try {
+//			MP3File trackMP3File = new MP3File(trackFile);
+//			if(trackMP3File.hasID3v1Tag()){
+//				ID3v1 id3v1Tag = trackMP3File.getID3v1Tag();
+//				System.out.println(id3v1Tag.toString());
+//			} else {
+//				System.out.println("No ID3v1 tag");
+//			}
+//		} catch (TagException e) {
+//			e.printStackTrace();
+//		}
 	    
 	    outstream.close();
 	}

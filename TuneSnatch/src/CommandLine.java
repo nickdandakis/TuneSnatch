@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 
 public class CommandLine {
-	// System Input Scanner object
+	// System Input scanner object
 	Scanner in = new Scanner(new InputStreamReader(System.in));
 	private Synchronizer sz;
 	
@@ -23,7 +23,7 @@ public class CommandLine {
 	
 	private void printHelp(){
 		// Print out for help
-		// [FIX]: Make more user friendly and comprehensible
+		// TODO Make more user friendly and comprehensible
 		System.out.println("List of commands:");
 		System.out.println("download <SITE> <AREA/SUBAREA> <PAGES>");
 		System.out.println("sync <SITE> <AREA/SUBAREA> <PAGES>");
@@ -36,6 +36,7 @@ public class CommandLine {
 		System.out.println("\nNumber of pages == 0 means all pages.\n<SITE> == HypeMachine || SoundCloud (case-sensitive) \n");
 		System.out.println("For HypeMachine: <AREA/SUBAREA> == popular || <USERNAME>");
 		System.out.println("For SoundCloud: <AREA/SUBAREA> == <USERNAME>/[favorites || tracks]");
+		System.out.println("For Mixcloud: <AREA/SUBAREA> == <USERNAME>/[activity || listens || favorites || null]");
 	}
 	
 	/*
@@ -105,6 +106,8 @@ public class CommandLine {
 						html = new HypeMachineHTML(area, i);
 					else if(site.equalsIgnoreCase("SoundCloud"))
 						html = new SoundCloudHTML(area, i);
+					else if(site.equalsIgnoreCase("Mixcloud"))
+						html = new MixcloudHTML(area, i);
 					
 					tracklist.addTracks(html);
 					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getAREA());
@@ -119,8 +122,10 @@ public class CommandLine {
 						html = new HypeMachineHTML(area, i);
 					else if(site.equalsIgnoreCase("SoundCloud"))
 						html = new SoundCloudHTML(area, i);
+					else if(site.equalsIgnoreCase("Mixcloud"))
+						html = new MixcloudHTML(area, i);
 
-					if(html.getDoc().toString().length() < 35000) // [FIX]: Doesn't work for SoundCloud anymore. Check for same tracks on next page as well.
+					if(html.getDocument().toString().length() < 35000) // TODO Doesn't work for SoundCloud anymore. Check for same tracks on next page as well.
 						break;
 					tracklist.addTracks(html);
 					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getAREA());
@@ -145,6 +150,9 @@ public class CommandLine {
 					html = new HypeMachineHTML(area, i);
 				else if(site.equalsIgnoreCase("SoundCloud"))
 					html = new SoundCloudHTML(area, i);
+				else if(site.equalsIgnoreCase("Mixcloud"))
+					html = new MixcloudHTML(area, i);
+				
 				sz.addHTML(html);
 			}
 		} else {
@@ -152,6 +160,8 @@ public class CommandLine {
 				html = new HypeMachineHTML(area, pages);
 			else if(site.equalsIgnoreCase("SoundCloud"))
 				html = new SoundCloudHTML(area, pages);
+			else if(site.equalsIgnoreCase("Mixcloud"))
+				html = new MixcloudHTML(area, pages);
 			
 			sz.addHTML(html);
 		}
@@ -166,7 +176,8 @@ public class CommandLine {
 		for(HTML html : sz.getSyncdata()){
 			if(html.getAREA().equalsIgnoreCase(area) && html.getPAGENUM() == pages &&
 					((site.equalsIgnoreCase("HypeMachine") && html instanceof HypeMachineHTML) ||
-							(site.equalsIgnoreCase("SoundCloud") && html instanceof SoundCloudHTML))){
+							(site.equalsIgnoreCase("SoundCloud") && html instanceof SoundCloudHTML) ||
+								(site.equalsIgnoreCase("Mixcloud") && html instanceof MixcloudHTML))){
 				sz.removeHTML(html);
 				break;
 			}
@@ -193,10 +204,7 @@ public class CommandLine {
 		dw.downloadTracklist(tracklist);
 	}
 	
-	/*
-	 * NOT YET IMPLEMENTED!
-	 */
-	private void printNewtracks() {
+	private void printNewtracks() { // TODO
 		System.out.println("IMMA PRINT ALL DA TRACKS!");
 	}
 	
@@ -204,7 +212,7 @@ public class CommandLine {
 		sz.printSyncData();
 	}
 	
-	// [FIX]: Doesn't work for Windows! 
+	// TODO Only works for UNIX 
 	private void clear(){
 		final String ESC = "\033[";
 		System.out.print(ESC + "2J"); 

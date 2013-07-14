@@ -1,4 +1,9 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+
+import org.jsoup.nodes.Document;
 
 
 public class HTML implements java.io.Serializable{
@@ -48,7 +53,18 @@ public class HTML implements java.io.Serializable{
 		this.COMPLETE_URL = COMPLETE_URL;
 	}
 
-	public Object getDoc() throws IOException {
+	public void saveDocument(Document document){
+		File htmlFile = new File("." + File.separator + getAREA().replace("/", "-") + "-p" + getPAGENUM() + ".html");
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(htmlFile.getAbsoluteFile()));
+			bw.write(document.toString());
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Object getDocument() throws IOException {
 		return null;
 	}
 }
