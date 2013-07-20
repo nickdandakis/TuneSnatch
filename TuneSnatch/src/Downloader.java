@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 //import org.farng.mp3.MP3File;
@@ -16,13 +17,32 @@ import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 
 
-public class Downloader {
+public class Downloader extends Thread {
 	
 	private static String HYPEM_SERVE_URL = "http://hypem.com/serve/source/";
 	private Map<String, String> COOKIES;
+        private Track track;
+        private ArrayList<Thread> downloaderArrayList = new ArrayList<Thread>();
+        
+        //Timing code follows
+        private long startTime;
+        private long endTime;
 	
-	public Downloader() {
+	public Downloader() {            
 	}
+        
+        public Downloader(Track track) {
+            this.track = track;
+        }
+        
+        public void run() {
+            try {
+                downloadTrack(track);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            
+        }
 	
 	/** MAIN METHODS **/
 	private long getFilesize(Track track) throws IOException{
@@ -66,37 +86,44 @@ public class Downloader {
 	 * Loops through each Track in a TrackList and downloads it
 	 * (if it hasn't been downloaded already)  
 	 */
-	public void downloadTracklist(TrackList tracklist){
-		for(int i=0; i<tracklist.getSize(); i++){
-			try {
-				if(!isDownloaded(tracklist.getTrack(i)))
-					downloadTrack(tracklist.getTrack(i));
-				else
-					System.out.println(tracklist.getTrack(i).getARTIST() + " - " + tracklist.getTrack(i).getSONG() + " already downloaded");
-			} catch (IOException e) {
-				System.out.println("Invalid HTTP request");
-			}
-		}
+	public void downloadTracks(TrackList tracklist) throws IOException {
+            int j = 0;
+            startTime = System.currentTimeMillis();
+            for(int i=0; i<tracklist.getSize(); i++){
+                    
+                if(!isDownloaded(tracklist.getTrack(i))) {                                    
+                        Thread trackDownloadThread = new Thread(new Downloader (tracklist.getTrack(i)));
+                        downloaderArrayList.add(trackDownloadThread);
+                        System.out.println("Thread "+j+ " about to run");
+                        downloaderArrayList.get(j).start();
+                        System.out.println("Thread "+j+ " running");
+                        j++;
+                } else {
+                        System.out.println(tracklist.getTrack(i).getARTIST() + " - " + tracklist.getTrack(i).getSONG() + " already downloaded");
+                }
+            }
+            endTime = System.currentTimeMillis();
+            System.out.println("***********Time taken = "+(endTime - startTime)+" ms *******************");
 	}
 
 	public void downloadTrack(Track track) throws IOException{
 		String url = null;
-		
+		Object trackClass = track.getClass();
 		/*
 		 * HypeMachine won't serve the download URL if the request doesn't contain the same
 		 * cookies as the initial request.
 		 * Mixcloud needs some bruteforcing. Check getMixcloudTrackDownloadURL for more info.
 		 */
-		if(track.getClass() == HypeMachineTrack.class){
+		if(trackClass == HypeMachineTrack.class){
 			COOKIES = ((HypeMachineTrack) track).getCOOKIES();
 			url = getHypeMachineTrackDownloadURL((HypeMachineTrack) track);
-		} else if(track.getClass() == SoundCloudTrack.class){
+		} else if(trackClass == SoundCloudTrack.class){
 			url = ((SoundCloudTrack) track).getSTREAMURL();
-		} else if(track.getClass() == MixcloudTrack.class){
+		} else if(trackClass == MixcloudTrack.class){
 			url = getMixcloudTrackDownloadURL((MixcloudTrack) track);
 		}
 		
-		URLConnection conn = new URL(url).openConnection();
+            URLConnection conn = new URL(url).openConnection();
 	    InputStream is = conn.getInputStream();
 	    
 	    int filesize = conn.getContentLength();

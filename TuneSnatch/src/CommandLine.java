@@ -138,7 +138,7 @@ public class CommandLine {
 			}
 		}
 
-		dw.downloadTracklist(tracklist);
+		dw.downloadTracks(tracklist);
 	}
 	/*
 	 * Adds site/area and page(s) into the sync list.
@@ -210,7 +210,7 @@ public class CommandLine {
 			}
 		}
 		
-		dw.downloadTracklist(tracklist);
+		dw.downloadTracks(tracklist);
 	}
 	
 	private void printNewtracks() { // TODO
