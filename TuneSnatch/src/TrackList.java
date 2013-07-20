@@ -18,7 +18,7 @@ public class TrackList {
 		Mixcloud_song, Mixcloud_username, Mixcloud_previewUrl, Mixcloud_coverUrl
 	}
 	private ArrayList<Track> tracks = new ArrayList<Track>();
-	private static final boolean DEBUG = false;	// Toggles ability to print out track fields
+	private static final boolean debug = false;	// Toggles ability to print out track fields
 	
 	public TrackList() {
 	}
@@ -102,9 +102,9 @@ public class TrackList {
 			song = filter(trackString, FilterKey.HypeMachine_song);
 			posturl = filter(trackString, FilterKey.HypeMachine_posturl);
 			
-			HypeMachineTrack track = new HypeMachineTrack(id, key, artist, song, posturl, ((HypeMachineHTML) html).getCOOKIES());
+			HypeMachineTrack track = new HypeMachineTrack(id, key, artist, song, posturl, ((HypeMachineHTML) html).getCookies());
 			
-			if(DEBUG){
+			if(debug){
 				System.out.println(trackString);
 				System.out.println(track.toString());
 			}
@@ -129,7 +129,7 @@ public class TrackList {
 			
 			SoundCloudTrack track = new SoundCloudTrack(id, song, username, streamUrl, waveformUrl);
 			
-			if(DEBUG){
+			if(debug){
 				System.out.println(trackString);
 				System.out.println(track.toString());
 			}
@@ -164,7 +164,7 @@ public class TrackList {
 			coverUrl = filter(covers.get(i), FilterKey.Mixcloud_coverUrl);
 			MixcloudTrack track = new MixcloudTrack(id, song, username, previewUrl, coverUrl);
 			
-			if(DEBUG)
+			if(debug)
 				System.out.println(track.toString());
 			
 			tracks.add(track);

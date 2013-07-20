@@ -11,62 +11,62 @@ public class HTML implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -7381759251822881043L;
-	private String SITE_URL;
-	private String AREA;
-	private int PAGENUM;
-	private String COMPLETE_URL;
+	private String site;
+	private String area;
+	private int pagenumber;
+	private String completeURL;
 	
-	public HTML(String AREA, int PAGENUM) {
-		setAREA(AREA);
-		setPAGENUM(PAGENUM);
+	public HTML(String area, int pagenumber) {
+		setArea(area);
+		setPagenumber(pagenumber);
 	}
 	
-	public HTML(String complete_url){
-		setCOMPLETE_URL(complete_url);
-		breakdownCompleteURL(this.COMPLETE_URL);
+	public HTML(String completeURL){
+		setCompleteURL(completeURL);
+		breakdownCompleteURL(this.completeURL);
 	}
 
-	public String getSITE_URL() {
-		return SITE_URL;
+	public String getSite() {
+		return site;
 	}
 
-	public void setSITE_URL(String SITE_URL) {
-		this.SITE_URL = SITE_URL;
+	public void setSite(String site) {
+		this.site = site;
 	}
 
-	public String getAREA() {
-		return AREA;
+	public String getArea() {
+		return area;
 	}
 
-	public void setAREA(String AREA) {
-		this.AREA = AREA;
+	public void setArea(String area) {
+		this.area = area;
 	}
 
-	public int getPAGENUM() {
-		return PAGENUM;
+	public int getPagenumber() {
+		return pagenumber;
 	}
 
-	public void setPAGENUM(int PAGENUM) {
-		this.PAGENUM = PAGENUM;
+	public void setPagenumber(int pagenumber) {
+		this.pagenumber = pagenumber;
 	}
 
-	public String getCOMPLETE_URL() {
-		return COMPLETE_URL;
+	public String getCompleteURL() {
+		return completeURL;
 	}
 
-	public void setCOMPLETE_URL(String COMPLETE_URL) {
-		this.COMPLETE_URL = COMPLETE_URL;
+	public void setCompleteURL(String completeURL) {
+		this.completeURL = completeURL;
 	}
 
-	private void breakdownCompleteURL(String complete_URL) {
-		setSITE_URL(complete_URL.replaceAll(".com/.+", ".com/"));
-		setAREA(complete_URL.replaceAll(".+.com/", ""));
-		if(AREA.endsWith("/"))
-			AREA = AREA.substring(0, AREA.length()-1);
+	private void breakdownCompleteURL(String completeURL) {
+		setSite(completeURL.replaceAll(".com/.+", ".com/"));
+		setArea(completeURL.replaceAll(".+.com/", ""));
+		if(area.endsWith("/"))
+			area = area.substring(0, area.length()-1);
 	}
 
 	public void saveDocument(Document document){
-		File htmlFile = new File("." + File.separator + getAREA().replace("/", "-") + "-p" + getPAGENUM() + ".html");
+		File htmlFile = new File("." + File.separator + getArea().replace("/", "-") + "-p" + getPagenumber() + ".html");
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(htmlFile.getAbsoluteFile()));
 			bw.write(document.toString());
@@ -82,6 +82,7 @@ public class HTML implements java.io.Serializable{
 	
 	@Override
 	public String toString(){
-		return this.getSITE_URL() + "\n" + this.getAREA() + "\n" + this.getPAGENUM();
+		return String.format("Site: %s\nArea: %s\nPagenumber: %d",
+								this.site, this.area, this.pagenumber);
 	}
 }

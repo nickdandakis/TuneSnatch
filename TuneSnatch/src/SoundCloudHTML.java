@@ -13,14 +13,14 @@ public class SoundCloudHTML extends HTML {
 	private static final long serialVersionUID = 5589093030331078854L;
 	private static final boolean debug = false; // Toggles ability to save HTML document
 
-	public SoundCloudHTML(String complete_url){
-		super(complete_url);
+	public SoundCloudHTML(String completeURL){
+		super(completeURL);
 	}
 	
-	public SoundCloudHTML(String AREA, int PAGENUM) {
-		super(AREA, PAGENUM);
-		setSITE_URL("https://soundcloud.com/");
-		setCOMPLETE_URL(getSITE_URL() + getAREA() + "?format=html&page=" + getPAGENUM() + "/");
+	public SoundCloudHTML(String area, int pagenumber) {
+		super(area, pagenumber);
+		setSite("https://soundcloud.com/");
+		setCompleteURL(getSite() + getArea() + "?format=html&page=" + getPagenumber() + "/");
 	}
 	
 	public Document getDocument() throws FailingHttpStatusCodeException, MalformedURLException, IOException{
@@ -33,7 +33,7 @@ public class SoundCloudHTML extends HTML {
         webClient.getOptions().setUseInsecureSSL(true);
         webClient.getOptions().setJavaScriptEnabled(true);
         
-        HtmlPage page = webClient.getPage(getCOMPLETE_URL());
+        HtmlPage page = webClient.getPage(getCompleteURL());
 		Document doc = new Document(page.getWebResponse().getContentAsString());
 		webClient.closeAllWindows();
 

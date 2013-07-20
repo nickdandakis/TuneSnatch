@@ -29,10 +29,10 @@ public class Downloader {
 		String url = null;
 		
 		if(track.getClass() == HypeMachineTrack.class){
-			COOKIES = ((HypeMachineTrack) track).getCOOKIES();
+			COOKIES = ((HypeMachineTrack) track).getCookies();
 			url = getHypeMachineTrackDownloadURL((HypeMachineTrack) track);
 		} else if(track.getClass() == SoundCloudTrack.class){
-			url = ((SoundCloudTrack) track).getSTREAMURL();
+			url = ((SoundCloudTrack) track).getStreamURL();
 		} else if(track.getClass() == MixcloudTrack.class){
 			url = getMixcloudTrackDownloadURL((MixcloudTrack) track);
 		}
@@ -52,7 +52,7 @@ public class Downloader {
 		
 		for(File file : files){
 			try {
-				if(file.getName().equalsIgnoreCase(track.getARTIST() + " - " + track.getSONG() + ".mp3") && 
+				if(file.getName().equalsIgnoreCase(track.getArtist() + " - " + track.getSong() + ".mp3") && 
 						file.length() == getFilesize(track))
 					return true;
 			} catch (IOException e) {
@@ -72,7 +72,7 @@ public class Downloader {
 				if(!isDownloaded(tracklist.getTrack(i)))
 					downloadTrack(tracklist.getTrack(i));
 				else
-					System.out.println(tracklist.getTrack(i).getARTIST() + " - " + tracklist.getTrack(i).getSONG() + " already downloaded");
+					System.out.println(tracklist.getTrack(i).getArtist() + " - " + tracklist.getTrack(i).getSong() + " already downloaded");
 			} catch (IOException e) {
 				System.out.println("Invalid HTTP request");
 			}
@@ -88,10 +88,10 @@ public class Downloader {
 		 * Mixcloud needs some bruteforcing. Check getMixcloudTrackDownloadURL for more info.
 		 */
 		if(track.getClass() == HypeMachineTrack.class){
-			COOKIES = ((HypeMachineTrack) track).getCOOKIES();
+			COOKIES = ((HypeMachineTrack) track).getCookies();
 			url = getHypeMachineTrackDownloadURL((HypeMachineTrack) track);
 		} else if(track.getClass() == SoundCloudTrack.class){
-			url = ((SoundCloudTrack) track).getSTREAMURL();
+			url = ((SoundCloudTrack) track).getStreamURL();
 		} else if(track.getClass() == MixcloudTrack.class){
 			url = getMixcloudTrackDownloadURL((MixcloudTrack) track);
 		}
@@ -106,7 +106,7 @@ public class Downloader {
 	    double speed = 0;
 	    float totalDataWritten = 0;
 	    float percentage = 0;
-	    String unicodeFilename = track.getARTIST() + " - " + track.getSONG() + ".mp3"; // TODO Fix unicode filenames
+	    String unicodeFilename = track.getArtist() + " - " + track.getSong() + ".mp3"; // TODO Fix unicode filenames
 //	    String normalizedFilename = Normalizer.normalize(unicodeFilename, Normalizer.Form.NFKD);					NONE
 //	    String unicodeRegex = Pattern.quote("[\\p{InCombiningDiacriticalMarks}\\p{IsLm}\\p{IsSk}]+");				OF THIS SHIT
 //	    String filename = new String(normalizedFilename.replaceAll(unicodeRegex, "").getBytes("ascii"), "ascii");	WORKS.
@@ -162,7 +162,7 @@ public class Downloader {
 	 * This method constructs the correct URL and parses the response.
 	 */
 	private String getHypeMachineTrackDownloadURL(HypeMachineTrack track) throws IOException{
-		String COMPLETE_URL = HYPEM_SERVE_URL + track.getID() + "/" + track.getKEY() + "/";
+		String COMPLETE_URL = HYPEM_SERVE_URL + track.getId() + "/" + track.getKey() + "/";
 		Response res = Jsoup.connect(COMPLETE_URL).ignoreContentType(true).cookies(COOKIES).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		
 		String strs[] = res.parse().toString().split("&quot;");
@@ -182,7 +182,7 @@ public class Downloader {
 	 * http://stream11.mxcdn.com/cloudcasts/originals/9/6/a/e/93a8-2d77-4573-85c5-68bfb679d9bc.mp3 - download URL
 	 */
 	private String getMixcloudTrackDownloadURL(MixcloudTrack track) throws IOException {
-		String downloadUrl = track.getPREVIEW_URL().replaceAll("previews", "cloudcasts/originals");
+		String downloadUrl = track.getPreviewURL().replaceAll("previews", "cloudcasts/originals");
 		
 		try {
 			@SuppressWarnings("unused")

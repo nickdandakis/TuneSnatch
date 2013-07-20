@@ -17,19 +17,19 @@ public class MixcloudHTML extends HTML {
 	private static final long serialVersionUID = 5416179481396296124L;
 	private static final boolean debug = false;	// Toggles ability to save HTML document
 	
-	public MixcloudHTML(String complete_url){
-		super(complete_url);
+	public MixcloudHTML(String completeURL){
+		super(completeURL);
 	}
 	
-	public MixcloudHTML(String AREA, int PAGENUM) {
-		super(AREA, PAGENUM);
-		setSITE_URL("http://mixcloud.com/");
-		setCOMPLETE_URL(getSITE_URL() + getAREA() + "?page=" + getPAGENUM() + "/");
+	public MixcloudHTML(String area, int pagenumber) {
+		super(area, pagenumber);
+		setSite("http://mixcloud.com/");
+		setCompleteURL(getSite() + getArea() + "?page=" + getPagenumber() + "/");
 	}
 	
 	public Document getDocument() throws IOException{
 		System.out.println("Scraping Mixcloud...");
-		Response res = Jsoup.connect(getCOMPLETE_URL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
+		Response res = Jsoup.connect(getCompleteURL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		Document doc = res.parse();
 		
 		if(debug)

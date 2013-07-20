@@ -1,34 +1,34 @@
 
 public class SoundCloudTrack extends Track {
 	
-	private String STREAMURL;
-	private String WAVEFORMURL;
+	private String streamURL;
+	private String waveformURL;
 	
-	public SoundCloudTrack(String ID, String SONG, String USERNAME, String STREAMURL, String WAVEFORMURL) {
-		super(ID, USERNAME, SONG);
-		setSTREAMURL(STREAMURL);
-		setWAVEFORMURL(WAVEFORMURL);
+	public SoundCloudTrack(String id, String song, String username, String streamURL, String waveformURL) {
+		super(id, username, song);
+		setStreamURL(streamURL);
+		setWaveformURL(waveformURL);
 	}
 
-	public String getSTREAMURL() {
-		return STREAMURL;
+	public String getStreamURL() {
+		return streamURL;
 	}
 
-	public void setSTREAMURL(String STREAMURL) {
-		this.STREAMURL = STREAMURL;
+	public void setStreamURL(String streamURL) {
+		this.streamURL = streamURL;
 	}
 
-	public String getWAVEFORMURL() {
-		return WAVEFORMURL;
+	public String getWaveformURL() {
+		return waveformURL;
 	}
 
-	public void setWAVEFORMURL(String WAVEFORMURL) {
-		this.WAVEFORMURL = WAVEFORMURL;
+	public void setWaveformURL(String waveformURL) {
+		this.waveformURL = waveformURL;
 	}
 	
 	@Override
 	public String toString(){
 		return String.format("id: %s\ntitle: %s\nartist: %s\nstreamurl: %s\nwaveformurl: %s", 
-								getID(), getSONG(), getARTIST(), getSTREAMURL(), getWAVEFORMURL()); 
+								getId(), getSong(), getArtist(), getStreamURL(), getWaveformURL()); 
 	}
 }
