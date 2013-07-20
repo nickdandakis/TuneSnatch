@@ -15,7 +15,11 @@ import org.jsoup.nodes.Document;
 public class MixcloudHTML extends HTML {
 
 	private static final long serialVersionUID = 5416179481396296124L;
-	private static final boolean DEBUG = false;	// Toggles ability to save HTML document
+	private static final boolean debug = false;	// Toggles ability to save HTML document
+	
+	public MixcloudHTML(String complete_url){
+		super(complete_url);
+	}
 	
 	public MixcloudHTML(String AREA, int PAGENUM) {
 		super(AREA, PAGENUM);
@@ -28,9 +32,10 @@ public class MixcloudHTML extends HTML {
 		Response res = Jsoup.connect(getCOMPLETE_URL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		Document doc = res.parse();
 		
-		if(DEBUG)
+		if(debug)
 			saveDocument(doc);
 		
 		return doc;
 	}
+	
 }

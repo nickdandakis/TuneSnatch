@@ -16,6 +16,10 @@ public class HTML implements java.io.Serializable{
 	private int PAGENUM;
 	private String COMPLETE_URL;
 	
+	public HTML(String complete_url){
+		setCOMPLETE_URL(complete_url);
+	}
+	
 	public HTML(String AREA, int PAGENUM) {
 		setAREA(AREA);
 		setPAGENUM(PAGENUM);
@@ -51,6 +55,14 @@ public class HTML implements java.io.Serializable{
 
 	public void setCOMPLETE_URL(String COMPLETE_URL) {
 		this.COMPLETE_URL = COMPLETE_URL;
+		breakdownCompleteURL(this.COMPLETE_URL);
+	}
+
+	private void breakdownCompleteURL(String complete_URL) {
+		setSITE_URL(complete_URL.replaceAll(".com/.+", ".com/"));
+		setAREA(complete_URL.replaceAll(".+.com/", ""));
+		if(AREA.endsWith("/"))
+			AREA = AREA.substring(0, AREA.length()-1);
 	}
 
 	public void saveDocument(Document document){
@@ -66,5 +78,10 @@ public class HTML implements java.io.Serializable{
 	
 	public Object getDocument() throws IOException {
 		return null;
+	}
+	
+	@Override
+	public String toString(){
+		return this.getSITE_URL() + "\n" + this.getAREA() + "\n" + this.getPAGENUM();
 	}
 }

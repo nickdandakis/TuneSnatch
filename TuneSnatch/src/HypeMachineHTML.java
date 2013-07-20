@@ -11,6 +11,10 @@ public class HypeMachineHTML extends HTML {
 	private Map<String, String> COOKIES;
 	private static final boolean DEBUG = true; // Toggles ability to save HTML document
 	
+	public HypeMachineHTML(String complete_url){
+		super(complete_url);
+	}
+	
 	public HypeMachineHTML(String area, int pagenum){
 		super(area, pagenum);
 		setSITE_URL("http://hypem.com/");
