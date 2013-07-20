@@ -41,10 +41,18 @@ public class Synchronizer extends UserProfile{
 	
 	public void removeHTML(HTML html){
 		syncdata.remove(html);
+		saveSyncData();
+	}
+	
+	public void removeHTML(int index){
+		syncdata.remove(index);
+		saveSyncData();
 	}
 	
 	public void printSyncData(){
+		int i=0;
 		for(HTML html : syncdata){
+			System.out.print(String.format("[%d]: ", ++i));
 			System.out.println(html.getCOMPLETE_URL());
 		}
 		if(syncdata.size() == 0)

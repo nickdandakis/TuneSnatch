@@ -29,14 +29,8 @@ public class TuneSnatch {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		HypeMachineHTML mxcld = new HypeMachineHTML("http://www.hypem.com/nickdandakis");
-		System.out.println(mxcld.toString());
-		
-		MixcloudHTML mxcld2 = new MixcloudHTML("http://www.mixcloud.com/ambientblog/favorites");
-		System.out.println(mxcld2.toString());
-		
-//		CommandLine cmd = new CommandLine();	
-//		cmd.launch();
+		CommandLine cmd = new CommandLine();	
+		cmd.launch();
 //		try {
 //			test();
 //		} catch (IOException e) {

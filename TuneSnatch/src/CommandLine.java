@@ -7,6 +7,7 @@ public class CommandLine {
 	// System Input scanner object
 	Scanner in = new Scanner(new InputStreamReader(System.in));
 	private Synchronizer sz;
+	private Downloader dw;
 	
 	/**
 	 * Constructor for CommandLine object.
@@ -15,6 +16,7 @@ public class CommandLine {
 	public CommandLine() {
 		sz = new Synchronizer();
 		sz.restoreSyncData();
+		dw = new Downloader();
 	}
 	
 	private void prompt(){
@@ -78,6 +80,8 @@ public class CommandLine {
 					printNewtracks();
 				if(args[0].equalsIgnoreCase("clear") && args[1].contains("insync"))
 					sz.clearSyncData();
+				if(args[0].equalsIgnoreCase("unsync"))
+					unsync(Integer.valueOf(args[1]));
 			} else if(args.length == 4){
 				if(args[0].equalsIgnoreCase("download"))
 					download(args[1], args[2], args[3]);
@@ -96,7 +100,6 @@ public class CommandLine {
 	private void download(String site, String area, String page) {
 		int pages = Integer.parseInt(page);
 		TrackList tracklist = new TrackList();
-		Downloader dw = new Downloader();
 		HTML html = null;
 		
 		if(pages != 0){
@@ -141,7 +144,7 @@ public class CommandLine {
 	 * Adds site/area and page(s) into the sync list.
 	 */
 	private void sync(String site, String area, String page){
-		int pages = Integer.parseInt(page);
+		int pages = Integer.valueOf(page);
 		HTML html = null;
 		
 		if(pages != 0){
@@ -178,11 +181,18 @@ public class CommandLine {
 					((site.equalsIgnoreCase("HypeMachine") && html instanceof HypeMachineHTML) ||
 							(site.equalsIgnoreCase("SoundCloud") && html instanceof SoundCloudHTML) ||
 								(site.equalsIgnoreCase("Mixcloud") && html instanceof MixcloudHTML))){
+				System.out.println("Conditions met");
 				sz.removeHTML(html);
 				break;
 			}
-				
 		}
+		
+		printInsync();
+	}
+	
+	private void unsync(int index){
+		sz.removeHTML(--index);
+		printInsync();
 	}
 	
 	/*
@@ -190,7 +200,6 @@ public class CommandLine {
 	 * Downloader object avoids downloading already downloaded tracks.
 	 */
 	private void pull(){
-		Downloader dw = new Downloader();
 		TrackList tracklist = new TrackList();
 		
 		for(HTML html : sz.getSyncdata()){

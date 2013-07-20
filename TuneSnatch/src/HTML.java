@@ -16,13 +16,14 @@ public class HTML implements java.io.Serializable{
 	private int PAGENUM;
 	private String COMPLETE_URL;
 	
-	public HTML(String complete_url){
-		setCOMPLETE_URL(complete_url);
-	}
-	
 	public HTML(String AREA, int PAGENUM) {
 		setAREA(AREA);
 		setPAGENUM(PAGENUM);
+	}
+	
+	public HTML(String complete_url){
+		setCOMPLETE_URL(complete_url);
+		breakdownCompleteURL(this.COMPLETE_URL);
 	}
 
 	public String getSITE_URL() {
@@ -55,7 +56,6 @@ public class HTML implements java.io.Serializable{
 
 	public void setCOMPLETE_URL(String COMPLETE_URL) {
 		this.COMPLETE_URL = COMPLETE_URL;
-		breakdownCompleteURL(this.COMPLETE_URL);
 	}
 
 	private void breakdownCompleteURL(String complete_URL) {
