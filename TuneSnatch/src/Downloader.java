@@ -23,6 +23,9 @@ public class Downloader extends Thread {
 	private Map<String, String> COOKIES;
         private Track track;
         private ArrayList<Thread> downloaderArrayList = new ArrayList<Thread>();
+        
+        private long beginTime;
+        private long endTime;
 	
 	public Downloader() {            
 	}
@@ -42,17 +45,7 @@ public class Downloader extends Thread {
 	
 	/** MAIN METHODS **/
 	private long getFilesize(Track track) throws IOException{
-		String url = null;
-		Object trackClass = track.getClass();
-                
-		if(trackClass == HypeMachineTrack.class){
-			COOKIES = ((HypeMachineTrack) track).getCookies();
-			url = getHypeMachineTrackDownloadURL((HypeMachineTrack) track);
-		} else if(trackClass == SoundCloudTrack.class){
-			url = ((SoundCloudTrack) track).getStreamURL();
-		} else if(trackClass == MixcloudTrack.class){
-			url = getMixcloudTrackDownloadURL((MixcloudTrack) track);
-		}
+        String url = getURL(track);
 		
 		URLConnection conn = new URL(url).openConnection();
 	    
@@ -70,8 +63,8 @@ public class Downloader extends Thread {
 		for(File file : files){
 			try {
 				if(file.getName().equalsIgnoreCase(track.getArtist() + " - " + track.getSong() + ".mp3") && 
-						file.length() == getFilesize(track))
-					return true;
+                                    file.length() == getFilesize(track))
+                                    return true;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -83,12 +76,14 @@ public class Downloader extends Thread {
 	 * Loops through each Track in a TrackList and downloads it
 	 * (if it hasn't been downloaded already)  
 	 */
-	public void downloadTracks(TrackList tracklist) {
+	public void downloadTracks(TrackList tracklist) throws InterruptedException, IOException {
             int j = 0;
+            beginTime = System.currentTimeMillis();
             for(int i=0; i<tracklist.getSize(); i++){         
                     if(!isDownloaded(tracklist.getTrack(i))) {                                    
                             Thread trackDownloadThread = new Thread(new Downloader (tracklist.getTrack(i)));
                             downloaderArrayList.add(trackDownloadThread);
+                            System.out.println("Thread "+j+ " About to start");
                             downloaderArrayList.get(j).start();
                             System.out.println("Thread "+j+ " running");
                             j++;
@@ -96,25 +91,17 @@ public class Downloader extends Thread {
                             System.out.println(tracklist.getTrack(i).getArtist() + " - " + tracklist.getTrack(i).getSong() + " already downloaded");                    
                     }
             }
-	}
+            for(int k=0; k<downloaderArrayList.size(); k++) {
+                downloaderArrayList.get(k).join();
+                System.out.println("*****Thread "+k+" completed*****");
+            }
+            endTime = System.currentTimeMillis();
+            System.out.println("****Downloads Complete!****");
+            System.out.println("Time take = "+(endTime - beginTime)+" ms");
+        }
 
-	public void downloadTrack(Track track) throws IOException{
-		String url = null;
-		Object trackClass = track.getClass();
-		/*
-		 * HypeMachine won't serve the download URL if the request doesn't contain the same
-		 * cookies as the initial request.
-		 * Mixcloud needs some bruteforcing. Check getMixcloudTrackDownloadURL for more info.
-		 */
-		if(trackClass == HypeMachineTrack.class){
-			COOKIES = ((HypeMachineTrack) track).getCookies();
-			url = getHypeMachineTrackDownloadURL((HypeMachineTrack) track);
-		} else if(trackClass == SoundCloudTrack.class){
-			url = ((SoundCloudTrack) track).getStreamURL();
-		} else if(trackClass == MixcloudTrack.class){
-			url = getMixcloudTrackDownloadURL((MixcloudTrack) track);
-		}
-		
+	public void downloadTrack(Track track) throws IOException {
+            String url = getURL(track);		
             URLConnection conn = new URL(url).openConnection();
 	    InputStream is = conn.getInputStream();
 	    
@@ -174,6 +161,7 @@ public class Downloader extends Thread {
 	/** END OF MAIN METHODS **/
 	
 	/** HELPER METHODS **/
+        
 	/*
 	 * HypeMachine serves download URLs via a JSON response to a HTTP request in the following format:
 	 * http://hypem.com/serve/source/<TRACK_ID>/<TRACK_KEY>/, where <TRACK_ID> is the track ID and <TRACK_KEY> is the track key
@@ -226,5 +214,24 @@ public class Downloader extends Thread {
 		
 		return null;
 	}
+
+    private String getURL(Track track) throws IOException {
+        String url = null;
+        Object trackClass = track.getClass();
+        /*
+         * HypeMachine won't serve the download URL if the request doesn't contain the same
+         * cookies as the initial request.
+         * Mixcloud needs some bruteforcing. Check getMixcloudTrackDownloadURL for more info.
+         */
+        if(trackClass == HypeMachineTrack.class){
+                COOKIES = ((HypeMachineTrack) track).getCookies();
+                url = getHypeMachineTrackDownloadURL((HypeMachineTrack) track);
+        } else if(trackClass == SoundCloudTrack.class){
+                url = ((SoundCloudTrack) track).getStreamURL();
+        } else if(trackClass == MixcloudTrack.class){
+                url = getMixcloudTrackDownloadURL((MixcloudTrack) track);
+        }
+        return url;
+    }
 	/** END OF HELPER METHODS **/
 }
