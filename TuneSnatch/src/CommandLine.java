@@ -113,7 +113,7 @@ public class CommandLine {
 						html = new MixcloudHTML(area, i);
 					
 					tracklist.addTracks(html);
-					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getAREA());
+					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getArea());
 				}
 			} catch (IOException e) {
 				System.out.println("Invalid HTTP request");
@@ -131,13 +131,12 @@ public class CommandLine {
 					if(html.getDocument().toString().length() < 35000) // TODO Doesn't work for SoundCloud anymore. Check for same tracks on next page as well.
 						break;
 					tracklist.addTracks(html);
-					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getAREA());
+					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getArea());
 				}
 			} catch (IOException e) {
 				System.out.println("Invalid HTTP request");
 			}
 		}
-
 		dw.downloadTracks(tracklist);
 	}
 	/*
@@ -168,6 +167,9 @@ public class CommandLine {
 			
 			sz.addHTML(html);
 		}
+		
+		printInsync();
+		System.out.println("Execute a 'pull' command if you want to start downloading tracks");
 	}
 	
 	/*
@@ -177,7 +179,7 @@ public class CommandLine {
 		int pages = Integer.parseInt(page);
 		
 		for(HTML html : sz.getSyncdata()){
-			if(html.getAREA().equalsIgnoreCase(area) && html.getPAGENUM() == pages &&
+			if(html.getArea().equalsIgnoreCase(area) && html.getPagenumber() == pages &&
 					((site.equalsIgnoreCase("HypeMachine") && html instanceof HypeMachineHTML) ||
 							(site.equalsIgnoreCase("SoundCloud") && html instanceof SoundCloudHTML) ||
 								(site.equalsIgnoreCase("Mixcloud") && html instanceof MixcloudHTML))){

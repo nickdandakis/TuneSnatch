@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class UserProfile {
-	private String DATA_DIRECTORY;
+	private String dataDirectory;
 	
 	public UserProfile(){
 		File datadir = new File(defaultDirectory() + File.separator + ".TuneSnatch");
@@ -15,7 +15,7 @@ public class UserProfile {
 			datadir.mkdir();
 		}
 		
-		setDATA_DIRECTORY(datadir.getPath());
+		setDataDirectory(datadir.getPath());
 	}
 	
 	private static String defaultDirectory() {
@@ -63,11 +63,11 @@ public class UserProfile {
 		saveData((Object) null, file);
 	}
 
-	public String getDATA_DIRECTORY() {
-		return DATA_DIRECTORY;
+	public String getDataDirectory() {
+		return dataDirectory;
 	}
 
-	public void setDATA_DIRECTORY(String dATA_DIRECTORY) {
-		DATA_DIRECTORY = dATA_DIRECTORY;
+	public void setDataDirectory(String dataDirectory) {
+		this.dataDirectory = dataDirectory;
 	}
 }

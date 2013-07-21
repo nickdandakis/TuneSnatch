@@ -16,7 +16,7 @@ public class Gracenote {
     
     public Gracenote(){
     	USERPROFILE = new UserProfile();
-    	gracenoteDataFile = new File(USERPROFILE.getDATA_DIRECTORY() + File.separator + "gracenote.dat");
+    	gracenoteDataFile = new File(USERPROFILE.getDataDirectory() + File.separator + "gracenote.dat");
     	
     	if(!userIDExists()){
     		try {

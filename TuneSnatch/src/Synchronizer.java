@@ -2,15 +2,15 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class Synchronizer extends UserProfile{
+public class Synchronizer {
 
 	private ArrayList<HTML> syncdata = new ArrayList<HTML>();
 	private File syncDataFile;
-	private UserProfile USERPROFILE;
+	private UserProfile userProfile;
 	
 	public Synchronizer() {
-		USERPROFILE = new UserProfile();
-		syncDataFile = new File(USERPROFILE.getDATA_DIRECTORY() + File.separator + "sync.dat");
+		userProfile = new UserProfile();
+		syncDataFile = new File(userProfile.getDataDirectory() + File.separator + "sync.dat");
 	}
 
 	public ArrayList<HTML> getSyncdata() {
@@ -25,7 +25,7 @@ public class Synchronizer extends UserProfile{
 		//Add validation
 		boolean exists = false;
 		for(HTML syncdhtml : syncdata){
-			if(syncdhtml.getCOMPLETE_URL().equalsIgnoreCase(html.getCOMPLETE_URL())){
+			if(syncdhtml.getCompleteURL().equalsIgnoreCase(html.getCompleteURL())){
 				exists = true;
 				break;
 			}
@@ -34,7 +34,7 @@ public class Synchronizer extends UserProfile{
 		if(!exists)
 			syncdata.add(html);
 		else
-			System.out.println(html.getCOMPLETE_URL() + " is already kept track of");
+			System.out.println(html.getCompleteURL() + " is already kept track of");
 		
 		saveSyncData();
 	}
@@ -53,7 +53,7 @@ public class Synchronizer extends UserProfile{
 		int i=0;
 		for(HTML html : syncdata){
 			System.out.print(String.format("[%d]: ", ++i));
-			System.out.println(html.getCOMPLETE_URL());
+			System.out.println(html.getCompleteURL());
 		}
 		if(syncdata.size() == 0)
 			System.out.println("Not keeping track of anything. ");
@@ -61,12 +61,12 @@ public class Synchronizer extends UserProfile{
 	
 	public void clearSyncData(){
 		syncdata = new ArrayList<HTML>();
-		USERPROFILE.clearData(syncDataFile);
+		userProfile.clearData(syncDataFile);
 	}
 	
 	public void restoreSyncData(){
-		System.out.println("Restoring sync'd");
-		ArrayList<?> restoredObject = (ArrayList<?>) USERPROFILE.restoreData(syncDataFile);
+		System.out.println("Restoring sync data");
+		ArrayList<?> restoredObject = (ArrayList<?>) userProfile.restoreData(syncDataFile);
 		ArrayList<HTML> checked = new ArrayList<HTML>();
 		
 		if(restoredObject != null) {
@@ -79,7 +79,7 @@ public class Synchronizer extends UserProfile{
 	}
 	
 	private void saveSyncData(){
-		USERPROFILE.saveData(syncdata, syncDataFile);
+		userProfile.saveData(syncdata, syncDataFile);
 	}
 	
 }

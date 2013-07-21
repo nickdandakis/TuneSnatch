@@ -1,38 +1,38 @@
 
 public class Track {
 
-	private String ID;
-	private String SONG;
-	private String ARTIST;
+	private String id;
+	private String song;
+	private String artist;
 	
-	public Track(String ID, String SONG, String ARTIST) {
-		setID(ID);
-		setSONG(SONG);
-		setARTIST(ARTIST);
+	public Track(String id, String song, String artist) {
+		setId(id);
+		setSong(song);
+		setArtist(artist);
 	}
 
-	public String getID() {
-		return ID;
+	public String getId() {
+		return id;
 	}
 
-	public void setID(String ID) {
-		this.ID = ID;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getSONG() {
-		return SONG;
+	public String getSong() {
+		return song;
 	}
 
-	public void setSONG(String SONG) {
-		this.SONG = SONG;
+	public void setSong(String song) {
+		this.song = song;
 	}
 
-	public String getARTIST() {
-		return ARTIST;
+	public String getArtist() {
+		return artist;
 	}
 
-	public void setARTIST(String ARTIST) {
-		this.ARTIST = ARTIST;
+	public void setArtist(String artist) {
+		this.artist = artist;
 	}
 
 }

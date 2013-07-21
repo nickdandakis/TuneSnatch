@@ -8,34 +8,34 @@ import org.jsoup.nodes.Document;
 public class HypeMachineHTML extends HTML {
 
 	private static final long serialVersionUID = 106075426457023929L;
-	private Map<String, String> COOKIES;
-	private static final boolean DEBUG = true; // Toggles ability to save HTML document
+	private Map<String, String> cookies;
+	private static final boolean debug = false; // Toggles ability to save HTML document
 	
-	public HypeMachineHTML(String complete_url){
-		super(complete_url);
+	public HypeMachineHTML(String completeURL){
+		super(completeURL);
 	}
 	
-	public HypeMachineHTML(String area, int pagenum){
-		super(area, pagenum);
-		setSITE_URL("http://hypem.com/");
-		setCOMPLETE_URL(getSITE_URL() + getAREA() + "/" + getPAGENUM() + "/");
+	public HypeMachineHTML(String area, int pagenumber){
+		super(area, pagenumber);
+		setSite("http://hypem.com/");
+		setCompleteURL(getSite() + getArea() + "/" + getPagenumber() + "/");
 	}
 	
-	public void setCOOKIES(Map<String, String> COOKIES){
-		this.COOKIES = COOKIES;
+	public void setCookies(Map<String, String> cookies){
+		this.cookies = cookies;
 	}
 	
-	public Map<String,String> getCOOKIES(){
-		return COOKIES;
+	public Map<String,String> getCookies(){
+		return cookies;
 	}
 	
 	public Document getDocument() throws IOException{
 		System.out.println("Scraping HypeMachine...");
-		Response res = Jsoup.connect(getCOMPLETE_URL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
-		setCOOKIES(res.cookies());
+		Response res = Jsoup.connect(getCompleteURL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
+		setCookies(res.cookies());
 		Document doc = res.parse();
 		
-		if(DEBUG)
+		if(debug)
 			saveDocument(doc);
 		
 		return doc;
