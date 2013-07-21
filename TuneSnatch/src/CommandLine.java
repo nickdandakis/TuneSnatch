@@ -54,7 +54,7 @@ public class CommandLine {
 		 * Main loop; Parses input from System.in after each line break (ie when user hits the return/enter key)
 		 * Splits arguments with a single space character as a delimiter
 		 * Arguments are an array of Strings
-		 * Then checks number of arguments and executes recognized commands
+		 * Then checks number of arguments and executes recognized commandss
 		 */
 		for(prompt(); in.hasNextLine(); prompt()){
 			String line = in.nextLine().replaceAll("\n", "");
@@ -74,14 +74,15 @@ public class CommandLine {
 				if(args[0].equalsIgnoreCase("pull"))
 					pull();
 			} else if(args.length == 2){
-				if(args[0].equalsIgnoreCase("ls") && args[1].contains("insync"))
-					printInsync();
+				if(args[0].equalsIgnoreCase("sync") && args[1].contains("list"))
+					printSyncList();
 				if(args[0].equalsIgnoreCase("ls") && args[1].contains("newtracks"))
 					printNewtracks();
-				if(args[0].equalsIgnoreCase("clear") && args[1].contains("insync"))
-					sz.clearSyncData();
 				if(args[0].equalsIgnoreCase("unsync"))
 					unsync(Integer.valueOf(args[1]));
+			} else if(args.length == 3){
+				if(args[0].equalsIgnoreCase("clear") && args[1].contains("sync") && args[2].contains("list"))
+					sz.clearSyncData();
 			} else if(args.length == 4){
 				if(args[0].equalsIgnoreCase("download"))
 					download(args[1], args[2], args[3]);
@@ -146,7 +147,14 @@ public class CommandLine {
 				System.out.println("Invalid HTTP request");
 			}
 		}
-		dw.downloadTracks(tracklist);
+
+		try {
+			dw.downloadTracks(tracklist);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	/*
 	 * Adds site/area and page(s) into the sync list.
@@ -177,7 +185,7 @@ public class CommandLine {
 			sz.addHTML(html);
 		}
 		
-		printInsync();
+		printSyncList();
 		System.out.println("Execute a 'pull' command if you want to start downloading tracks");
 	}
 	
@@ -198,12 +206,12 @@ public class CommandLine {
 			}
 		}
 		
-		printInsync();
+		printSyncList();
 	}
 	
 	private void unsync(int index){
 		sz.removeHTML(--index); // Sync list is displayed to user with start index as 1 (not 0)
-		printInsync();
+		printSyncList();
 	}
 	
 	/*
@@ -220,7 +228,7 @@ public class CommandLine {
 		System.out.println("IMMA PRINT ALL DA TRACKS!");
 	}
 	
-	private void printInsync() {
+	private void printSyncList() {
 		sz.printSyncData();
 	}
 	
