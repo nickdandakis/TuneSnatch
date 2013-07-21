@@ -12,7 +12,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 public class SoundCloudHTML extends HTML {
 
 	private static final long serialVersionUID = 5589093030331078854L;
-	private static final boolean debug = true; // Toggles ability to save HTML document
+	private static final boolean debug = false; // Toggles ability to save HTML document
 
 	public SoundCloudHTML(String completeURL){
 		super(completeURL);
