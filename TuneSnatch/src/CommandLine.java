@@ -94,15 +94,20 @@ public class CommandLine {
 	}
 	
 	private void download (HTML html){
-		download(html.getSite(), html.getArea(), String.valueOf(html.getPagenumber()));
+		if(html.getSite().equalsIgnoreCase("http://hypem.com/"))
+			download("HypeMachine", html.getArea(), String.valueOf(html.getPagenumber()));
+		else if(html.getSite().equalsIgnoreCase("https://soundcloud.com/"))
+			download("SoundCloud", html.getArea(), String.valueOf(html.getPagenumber()));
+		else if(html.getSite().equalsIgnoreCase("http://mixcloud.com/"))
+			download("Mixcloud", html.getArea(), String.valueOf(html.getPagenumber()));
 	}
 
 	/*
 	 * Downloads all tracks from site/area and page(s) passed through.
 	 * 0 pages means to download all tracks from all pages.
 	 */
-	private void download(String site, String area, String page) {
-		int pages = Integer.parseInt(page);
+	private void download(String site, String area, String pagenumber) {
+		int pages = Integer.parseInt(pagenumber);
 		TrackList tracklist = new TrackList();
 		HTML html = null;
 		
@@ -132,7 +137,7 @@ public class CommandLine {
 					else if(site.equalsIgnoreCase("Mixcloud"))
 						html = new MixcloudHTML(area, i);
 					
-					if(html.getDocument().toString().length() < 40000) // TODO Doesn't work for SoundCloud anymore. Check for same tracks on next page as well.
+					if(html.getDocument().toString().length() < 40000)
 						break;
 					tracklist.addTracks(html);
 					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getArea());
@@ -197,7 +202,7 @@ public class CommandLine {
 	}
 	
 	private void unsync(int index){
-		sz.removeHTML(--index);
+		sz.removeHTML(--index); // Sync list is displayed to user with start index as 1 (not 0)
 		printInsync();
 	}
 	
@@ -206,17 +211,9 @@ public class CommandLine {
 	 * Downloader object avoids downloading already downloaded tracks.
 	 */
 	private void pull(){
-		TrackList tracklist = new TrackList();
-		
 		for(HTML html : sz.getSyncdata()){
-			try {
-				tracklist.addTracks(html);
-			} catch (IOException e) {
-				e.printStackTrace();
-		}		
+			download(html);
 		}
-		
-		dw.downloadTracks(tracklist);
 	}
 	
 	private void printNewtracks() { // TODO
