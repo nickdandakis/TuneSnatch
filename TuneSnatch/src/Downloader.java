@@ -44,12 +44,10 @@ public class Downloader extends Thread {
         }
 	
 	/** MAIN METHODS **/
-	private long getFilesize(Track track) throws IOException{
-        String url = getURL(track);
-		
-		URLConnection conn = new URL(url).openConnection();
-	    
-	    return conn.getContentLength();
+	private long getFilesize(Track track) throws IOException {
+            String url = getURL(track);
+            URLConnection conn = new URL(url).openConnection();
+            return conn.getContentLength();
 	}
 	
 	/*
@@ -61,13 +59,13 @@ public class Downloader extends Thread {
 		File[] files = dir.listFiles();
 		
 		for(File file : files){
-			try {
-				if(file.getName().equalsIgnoreCase(track.getArtist() + " - " + track.getSong() + ".mp3") && 
-                                    file.length() == getFilesize(track))
+//			try {
+				if(file.getName().equalsIgnoreCase(track.getArtist() + " - " + track.getSong() + ".mp3")) //&& 
+//                                    file.length() == getFilesize(track))
                                     return true;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 		}
 		return false;
 	}
@@ -83,6 +81,7 @@ public class Downloader extends Thread {
                     if(!isDownloaded(tracklist.getTrack(i))) {                                    
                             Thread trackDownloadThread = new Thread(new Downloader (tracklist.getTrack(i)));
                             downloaderArrayList.add(trackDownloadThread);
+                            System.out.println("Array size: "+downloaderArrayList.size());
                             System.out.println("Thread "+j+ " About to start");
                             downloaderArrayList.get(j).start();
                             System.out.println("Thread "+j+ " running");
