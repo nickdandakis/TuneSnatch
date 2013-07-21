@@ -92,6 +92,10 @@ public class CommandLine {
 			} 
 		}
 	}
+	
+	private void download (HTML html){
+		download(html.getSite(), html.getArea(), String.valueOf(html.getPagenumber()));
+	}
 
 	/*
 	 * Downloads all tracks from site/area and page(s) passed through.
@@ -127,8 +131,8 @@ public class CommandLine {
 						html = new SoundCloudHTML(area, i);
 					else if(site.equalsIgnoreCase("Mixcloud"))
 						html = new MixcloudHTML(area, i);
-
-					if(html.getDocument().toString().length() < 35000) // TODO Doesn't work for SoundCloud anymore. Check for same tracks on next page as well.
+					
+					if(html.getDocument().toString().length() < 40000) // TODO Doesn't work for SoundCloud anymore. Check for same tracks on next page as well.
 						break;
 					tracklist.addTracks(html);
 					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getArea());
@@ -209,7 +213,7 @@ public class CommandLine {
 				tracklist.addTracks(html);
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+		}		
 		}
 		
 		dw.downloadTracks(tracklist);
