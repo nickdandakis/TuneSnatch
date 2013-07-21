@@ -47,13 +47,14 @@ public class Downloader extends Thread {
 	/** MAIN METHODS **/
 	private long getFilesize(Track track) throws IOException{
 		String url = null;
-		
-		if(track.getClass() == HypeMachineTrack.class){
+		Object trackClass = track.getClass();
+                
+		if(trackClass == HypeMachineTrack.class){
 			COOKIES = ((HypeMachineTrack) track).getCOOKIES();
 			url = getHypeMachineTrackDownloadURL((HypeMachineTrack) track);
-		} else if(track.getClass() == SoundCloudTrack.class){
+		} else if(trackClass == SoundCloudTrack.class){
 			url = ((SoundCloudTrack) track).getSTREAMURL();
-		} else if(track.getClass() == MixcloudTrack.class){
+		} else if(trackClass == MixcloudTrack.class){
 			url = getMixcloudTrackDownloadURL((MixcloudTrack) track);
 		}
 		
@@ -94,7 +95,6 @@ public class Downloader extends Thread {
                 if(!isDownloaded(tracklist.getTrack(i))) {                                    
                         Thread trackDownloadThread = new Thread(new Downloader (tracklist.getTrack(i)));
                         downloaderArrayList.add(trackDownloadThread);
-                        System.out.println("Thread "+j+ " about to run");
                         downloaderArrayList.get(j).start();
                         System.out.println("Thread "+j+ " running");
                         j++;
