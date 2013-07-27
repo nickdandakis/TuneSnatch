@@ -4,6 +4,7 @@ public class Track {
 	private String id;
 	private String song;
 	private String artist;
+	private String streamURL;
 	
 	public Track(String id, String song, String artist) {
 		setId(id);
@@ -35,4 +36,12 @@ public class Track {
 		this.artist = artist;
 	}
 
+	public String getStreamURL() {
+		return streamURL;
+	}
+
+	public void setStreamURL(String streamURL) {
+		this.streamURL = streamURL;
+	}
+	
 }

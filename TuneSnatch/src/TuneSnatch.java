@@ -1,42 +1,26 @@
-import java.io.IOException;
-import java.net.MalformedURLException;
 
 public class TuneSnatch {
 	
-	public static void test() throws MalformedURLException, IOException{
-//		SoundHTML testHtml = new SoundHTML("nick-dandakis/favorites", 1);
-		HypeMachineHTML popular1HTML = new HypeMachineHTML("popular", 1);
-		HypeMachineHTML popular2HTML = new HypeMachineHTML("popular", 2);
-		TrackList tracklist = new TrackList();
-//		Downloader dw = new Downloader();
-		Synchronizer sz = new Synchronizer();
-		
-//		tracklist.addTracks(testHtml);
-		tracklist.addTracks(popular1HTML);
-		tracklist.addTracks(popular2HTML);
-		
-//		dw.download(tracklist.getTrack(0));
-//		dw.download(tracklist.getTrack(1));
-//		dw.download(tracklist.getTrack(4));
-//		dw.download(tracklist.getTrack(10));
-//		dw.download(tracklist.getTrack(11));
-//		dw.download(tracklist.getTrack(35));
-//		dw.download(tracklist.getTrack(40));
-		
-		sz.addHTML(popular1HTML);
-//		sz.addHTML(testHtml);
-		sz.addHTML(popular2HTML);
-	}
-	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		CommandLine cmd = new CommandLine();	
 		cmd.launch();
+		
+//		String testStr = "What's Going On feat. A*M*E - Monsieur Adi";
+//		System.out.println(testStr.replaceAll("[.\\\\/:*?\"<>|]?[\\\\/:*?\"<>|]*", ""));
+		
+//		HypeMachineHTML html = new HypeMachineHTML("popular", 0);
+//		Downloader dw = new Downloader();
+//		TrackList tl = new TrackList();
 //		try {
-//			test();
+//			tl.addTracks(html);
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//		}
+//		try {
+//			dw.downloadTrack(tl.getTrack(11));
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
-		
 	}
 
 }
