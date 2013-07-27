@@ -141,20 +141,6 @@ public class Downloader extends Thread {
 	    }
 	    System.out.println("");
 	    
-	    
-	    // TODO Proper ID3 tags for downloaded files
-//	    try {
-//			MP3File trackMP3File = new MP3File(trackFile);
-//			if(trackMP3File.hasID3v1Tag()){
-//				ID3v1 id3v1Tag = trackMP3File.getID3v1Tag();
-//				System.out.println(id3v1Tag.toString());
-//			} else {
-//				System.out.println("No ID3v1 tag");
-//			}
-//		} catch (TagException e) {
-//			e.printStackTrace();
-//		}
-	    
 	    outstream.close();
 	}
 	/** END OF MAIN METHODS **/
