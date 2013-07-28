@@ -158,4 +158,8 @@ public class Executor {
 		final String ESC = "\033[";
 		System.out.print(ESC + "2J"); 
 	}
+	
+	public void changeDownloadDirectory(String path){
+		UserProfile.setDownloadDirectory(path);
+	}
 }

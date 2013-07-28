@@ -88,6 +88,8 @@ public class CommandLine {
 			case 3:
 				if(args[0].equalsIgnoreCase("clear") && args[1].contains("sync") && args[2].contains("list"))
 					exe.clearSyncList();
+				else if(args[0].equalsIgnoreCase("config") && args[1].equalsIgnoreCase("DOWNLOAD_DIRECTORY"))
+					exe.changeDownloadDirectory(args[2]);
 				break;
 				
 			case 4:

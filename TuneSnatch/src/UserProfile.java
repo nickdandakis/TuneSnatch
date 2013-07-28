@@ -8,8 +8,8 @@ import java.io.ObjectOutputStream;
 import java.util.prefs.Preferences;
 
 public class UserProfile {
-	private String dataDirectory;
-	private Preferences preferences;
+	private static String dataDirectory;
+	private static Preferences preferences;
 	
 	public UserProfile(){
 		File datadir = new File(defaultDataDirectory() + File.separator + ".TuneSnatch");
@@ -21,35 +21,35 @@ public class UserProfile {
 	    setPreferences(Preferences.userRoot().node(this.getClass().getName()));
 	}
 	
-	public String getDataDirectory() {
+	public static String getDataDirectory() {
 		return dataDirectory;
 	}
 
-	public void setDataDirectory(String dataDirectory) {
-		this.dataDirectory = dataDirectory;
+	public static void setDataDirectory(String dataDirectory) {
+		UserProfile.dataDirectory = dataDirectory;
 	}
 	
-	public Preferences getPreferences() {
+	public static Preferences getPreferences() {
 		return preferences;
 	}
 
-	public void setPreferences(Preferences preferences) {
-		this.preferences = preferences;
+	public static void setPreferences(Preferences preferences) {
+		UserProfile.preferences = preferences;
 	}
 	
-	public String getDownloadDirectory(){
+	public static String getDownloadDirectory(){
 		return preferences.get("DOWNLOAD_DIRECTORY", System.getProperty("user.home") + File.separator + "music" + File.separator + "TuneSnatch");
 	}
 	
-	public void setDownloadDirectory(String path){
+	public static void setDownloadDirectory(String path){
 		preferences.put("DOWNLOAD_DIRECTORY", path);
 	}
 	
-	public int getSimultaneousDownloads(){
+	public static int getSimultaneousDownloads(){
 		return preferences.getInt("SIMULTANEOUS_DOWNLOADS", 0);
 	}
 	
-	public void setSimultaneousDownloads(int limit){
+	public static void setSimultaneousDownloads(int limit){
 		preferences.putInt("SIMULTANEOUS_DOWNLOADS", limit);
 	}
 	
@@ -65,7 +65,7 @@ public class UserProfile {
 	    return System.getProperty("user.dir");
 	}
 	
-	public void saveData(Object obj, File file){
+	public static void saveData(Object obj, File file){
 		try {
 			@SuppressWarnings("resource")
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
@@ -77,7 +77,7 @@ public class UserProfile {
 		}
 	}
 	
-	public Object restoreData(File file){
+	public static Object restoreData(File file){
 		Object obj = null;
 		try {
 			@SuppressWarnings("resource")
@@ -94,7 +94,7 @@ public class UserProfile {
 		return obj;
 	}
 	
-	public void clearData(File file){
+	public static void clearData(File file){
 		saveData((Object) null, file);
 	}
 

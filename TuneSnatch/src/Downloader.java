@@ -17,7 +17,7 @@ public class Downloader extends Thread {
     
     private static boolean VERBOSE = false; // Set to true to print out detailed download info (speed, percentage etc)
     
-	public Downloader() {            
+	public Downloader() {           
 	}
         
     public Downloader(Track track) {
@@ -116,7 +116,7 @@ public class Downloader extends Thread {
 	    String filename = generateFilename(track);
 	    int exp = (int) (Math.log(conn.getContentLength()) / Math.log(1000));
 	    String tracksize = String.format("%.2f", conn.getContentLength() / Math.pow(1000, exp));
-	    File trackFile = new File("." + File.separator + filename);
+	    File trackFile = new File(UserProfile.getDownloadDirectory() + File.separator + filename);
 	    
 	    OutputStream outstream = new FileOutputStream(trackFile);
 	    byte[] buffer = new byte[8192];
