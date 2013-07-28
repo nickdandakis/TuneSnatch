@@ -1,8 +1,8 @@
 import java.io.IOException;
 import java.util.Map;
 
-import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
 
 public class HypeMachineTrack extends Track {
 

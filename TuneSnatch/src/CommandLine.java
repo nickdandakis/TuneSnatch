@@ -60,7 +60,6 @@ public class CommandLine {
 				continue;
 			
 			String[] args = line.split(" ");
-			
 			if(args.length == 1){
 				if(args[0].equalsIgnoreCase("exit"))
 					System.exit(0);
@@ -87,7 +86,7 @@ public class CommandLine {
 					exe.sync(args[1], args[2], args[3]);
 				if(args[0].equalsIgnoreCase("unsync"))
 					exe.unsync(args[1], args[2], args[3]);
-			} 
+			}
 		}
 	}
 }
