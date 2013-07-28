@@ -13,18 +13,18 @@ public class Executor {
 	
 	public void download (HTML html){
 		if(html.getSite().equalsIgnoreCase("http://hypem.com/"))
-			download("HypeMachine", html.getArea(), String.valueOf(html.getPagenumber()));
+			download(Site.HypeMachine, html.getArea(), String.valueOf(html.getPagenumber()));
 		else if(html.getSite().equalsIgnoreCase("https://soundcloud.com/"))
-			download("SoundCloud", html.getArea(), String.valueOf(html.getPagenumber()));
+			download(Site.SoundCloud, html.getArea(), String.valueOf(html.getPagenumber()));
 		else if(html.getSite().equalsIgnoreCase("http://mixcloud.com/"))
-			download("Mixcloud", html.getArea(), String.valueOf(html.getPagenumber()));
+			download(Site.Mixcloud, html.getArea(), String.valueOf(html.getPagenumber()));
 	}
 
 	/*
 	 * Downloads all tracks from site/area and page(s) passed through.
 	 * 0 pages means to download all tracks from all pages.
 	 */
-	public void download(String site, String area, String pagenumber) {
+	public void download(Site site, String area, String pagenumber) {
 		int pages = Integer.parseInt(pagenumber);
 		TrackList tracklist = new TrackList();
 		HTML html = null;
@@ -32,11 +32,11 @@ public class Executor {
 		if(pages != 0){
 			try {
 				for(int i=1; i<=pages; i++){
-					if(site.equalsIgnoreCase("HypeMachine"))
+					if(site == Site.HypeMachine)
 						html = new HypeMachineHTML(area, i);
-					else if(site.equalsIgnoreCase("SoundCloud"))
+					else if(site == Site.SoundCloud)
 						html = new SoundCloudHTML(area, i);
-					else if(site.equalsIgnoreCase("Mixcloud"))
+					else if(site == Site.Mixcloud)
 						html = new MixcloudHTML(area, i);
 					
 					tracklist.addTracks(html);
@@ -48,11 +48,11 @@ public class Executor {
 		} else {
 			try {
 				for(int i=1; ; i++){
-					if(site.equalsIgnoreCase("HypeMachine"))
+					if(site == Site.HypeMachine)
 						html = new HypeMachineHTML(area, i);
-					else if(site.equalsIgnoreCase("SoundCloud"))
+					else if(site == Site.SoundCloud)
 						html = new SoundCloudHTML(area, i);
-					else if(site.equalsIgnoreCase("Mixcloud"))
+					else if(site == Site.Mixcloud)
 						html = new MixcloudHTML(area, i);
 					
 					if(html.getDocument().toString().length() < 40000)
@@ -76,27 +76,27 @@ public class Executor {
 	/*
 	 * Adds site/area and page(s) into the sync list.
 	 */
-	public void sync(String site, String area, String page){
+	public void sync(Site site, String area, String page){
 		int pages = Integer.valueOf(page);
 		HTML html = null;
 		
 		if(pages != 0){
 			for(int i=1; i<=pages; i++){
-				if(site.equalsIgnoreCase("HypeMachine"))
+				if(site == Site.HypeMachine)
 					html = new HypeMachineHTML(area, i);
-				else if(site.equalsIgnoreCase("SoundCloud"))
+				else if(site == Site.SoundCloud)
 					html = new SoundCloudHTML(area, i);
-				else if(site.equalsIgnoreCase("Mixcloud"))
+				else if(site == Site.Mixcloud)
 					html = new MixcloudHTML(area, i);
 				
 				sz.addHTML(html);
 			}
 		} else {
-			if(site.equalsIgnoreCase("HypeMachine"))
+			if(site == Site.HypeMachine)
 				html = new HypeMachineHTML(area, pages);
-			else if(site.equalsIgnoreCase("SoundCloud"))
+			else if(site == Site.SoundCloud)
 				html = new SoundCloudHTML(area, pages);
-			else if(site.equalsIgnoreCase("Mixcloud"))
+			else if(site == Site.Mixcloud)
 				html = new MixcloudHTML(area, pages);
 			
 			sz.addHTML(html);
@@ -109,14 +109,14 @@ public class Executor {
 	/*
 	 * Removes site/area and pages from the sync list
 	 */
-	public void unsync(String site, String area, String page){
+	public void unsync(Site site, String area, String page){
 		int pages = Integer.parseInt(page);
 		
 		for(HTML html : sz.getSyncdata()){
 			if(html.getArea().equalsIgnoreCase(area) && html.getPagenumber() == pages &&
-					((site.equalsIgnoreCase("HypeMachine") && html instanceof HypeMachineHTML) ||
-							(site.equalsIgnoreCase("SoundCloud") && html instanceof SoundCloudHTML) ||
-								(site.equalsIgnoreCase("Mixcloud") && html instanceof MixcloudHTML))){
+					((site == Site.HypeMachine && html instanceof HypeMachineHTML) ||
+							(site == Site.SoundCloud && html instanceof SoundCloudHTML) ||
+								(site == Site.SoundCloud && html instanceof MixcloudHTML))){
 				System.out.println("Conditions met");
 				sz.removeHTML(html);
 				break;

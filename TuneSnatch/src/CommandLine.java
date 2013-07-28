@@ -60,32 +60,51 @@ public class CommandLine {
 				continue;
 			
 			String[] args = line.split(" ");
-			if(args.length == 1){
+			switch (args.length) {
+			case 1:
 				if(args[0].equalsIgnoreCase("exit"))
 					System.exit(0);
-				if(args[0].equalsIgnoreCase("help"))
+				else if(args[0].equalsIgnoreCase("help"))
 					printHelp();
-				if(args[0].equalsIgnoreCase("cls"))
+				else if(args[0].equalsIgnoreCase("cls"))
 					exe.clear();
-				if(args[0].equalsIgnoreCase("pull"))
+				else if(args[0].equalsIgnoreCase("pull"))
 					exe.pull();
-			} else if(args.length == 2){
+				else
+					System.out.println("Need help? Just use the 'help' command!");
+				break;
+				
+			case 2:
 				if(args[0].equalsIgnoreCase("sync") && args[1].contains("list"))
 					exe.printSyncList();
-				if(args[0].equalsIgnoreCase("ls") && args[1].contains("newtracks"))
+				else if(args[0].equalsIgnoreCase("ls") && args[1].contains("newtracks"))
 					exe.printNewtracks();
-				if(args[0].equalsIgnoreCase("unsync"))
+				else if(args[0].equalsIgnoreCase("unsync"))
 					exe.unsync(Integer.valueOf(args[1]));
-			} else if(args.length == 3){
+				else
+					System.out.println("Need help? Just use the 'help' command!");
+				break;
+				
+			case 3:
 				if(args[0].equalsIgnoreCase("clear") && args[1].contains("sync") && args[2].contains("list"))
 					exe.clearSyncList();
-			} else if(args.length == 4){
-				if(args[0].equalsIgnoreCase("download"))
-					exe.download(args[1], args[2], args[3]);
-				if(args[0].equalsIgnoreCase("sync"))
-					exe.sync(args[1], args[2], args[3]);
-				if(args[0].equalsIgnoreCase("unsync"))
-					exe.unsync(args[1], args[2], args[3]);
+				break;
+				
+			case 4:
+				if(args[0].equalsIgnoreCase("download") && (Site.recognize(args[1]) != Site.Invalid))
+					exe.download(Site.recognize(args[1]), args[2], args[3]);
+				else if(args[0].equalsIgnoreCase("sync") && (Site.recognize(args[1]) != Site.Invalid))
+					exe.sync(Site.recognize(args[1]), args[2], args[3]);
+				else if(args[0].equalsIgnoreCase("unsync") && (Site.recognize(args[1]) != Site.Invalid))
+					exe.unsync(Site.recognize(args[1]), args[2], args[3]);
+				else if (Site.recognize(args[1]) == Site.Invalid)
+					System.out.println("Unrecognized site. Go home. You're drunk");
+				else
+					System.out.println("Need help? Just use the 'help' command!");
+				break;
+				
+			default:
+				break;
 			}
 		}
 	}
