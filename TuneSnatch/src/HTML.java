@@ -15,6 +15,7 @@ public class HTML implements java.io.Serializable{
 	private String area;
 	private int pagenumber;
 	private String completeURL;
+	private Document document;
 	
 	public HTML(String area, int pagenumber) {
 		setArea(area);
@@ -76,13 +77,17 @@ public class HTML implements java.io.Serializable{
 		}
 	}
 	
-	public Object getDocument() throws IOException {
-		return null;
+	public Document getDocument() {
+		return document;
 	}
 	
 	@Override
 	public String toString(){
 		return String.format("Site: %s\nArea: %s\nPagenumber: %d",
 								this.site, this.area, this.pagenumber);
+	}
+
+	public void setDocument(Document document) {
+		this.document = document;
 	}
 }

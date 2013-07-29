@@ -16,15 +16,29 @@ public class SoundCloudHTML extends HTML {
 
 	public SoundCloudHTML(String completeURL){
 		super(completeURL);
+		
+		try {
+			createDocument();
+		} catch (IOException e) {
+			System.out.println("Failed to parse HTML.");
+			e.printStackTrace();
+		}
 	}
 	
 	public SoundCloudHTML(String area, int pagenumber) {
 		super(area, pagenumber);
 		setSite("https://soundcloud.com/");
 		setCompleteURL(getSite() + getArea() + "?format=html&page=" + getPagenumber() + "/");
+		
+		try {
+			createDocument();
+		} catch (IOException e) {
+			System.out.println("Failed to parse HTML.");
+			e.printStackTrace();
+		}
 	}
 	
-	public Document getDocument() throws FailingHttpStatusCodeException, MalformedURLException, IOException{
+	public Document createDocument() throws FailingHttpStatusCodeException, MalformedURLException, IOException{
 		System.out.println("Scraping SoundCloud... (SoundCloud takes a while)");
 		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
 		final WebClient webClient = new WebClient(BrowserVersion.FIREFOX_17);

@@ -9,16 +9,18 @@ import java.util.prefs.Preferences;
 
 public class UserProfile {
 	private static String dataDirectory;
-	private static Preferences preferences;
-	
-	public UserProfile(){
+	static {
 		File datadir = new File(defaultDataDirectory() + File.separator + ".TuneSnatch");
 		if(!datadir.exists()){
 			datadir.mkdir();
 		}
 		setDataDirectory(datadir.getPath());
 		
-	    setPreferences(Preferences.userRoot().node(this.getClass().getName()));
+	    setPreferences(Preferences.userRoot().node(UserProfile.class.getName()));
+	}
+	private static Preferences preferences;
+	
+	private UserProfile(){
 	}
 	
 	public static String getDataDirectory() {
@@ -53,7 +55,7 @@ public class UserProfile {
 		preferences.putInt("SIMULTANEOUS_DOWNLOADS", limit);
 	}
 	
-	private static String defaultDataDirectory() {
+	static String defaultDataDirectory() {
 	    String OS = System.getProperty("os.name").toUpperCase();
 	    if (OS.contains("WIN"))
 	        return System.getenv("APPDATA");

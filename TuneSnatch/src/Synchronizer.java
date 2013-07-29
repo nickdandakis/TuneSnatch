@@ -6,11 +6,9 @@ public class Synchronizer {
 
 	private ArrayList<HTML> syncdata = new ArrayList<HTML>();
 	private File syncDataFile;
-	private UserProfile userProfile;
 	
 	public Synchronizer() {
-		userProfile = new UserProfile();
-		syncDataFile = new File(userProfile.getDataDirectory() + File.separator + "sync.dat");
+		syncDataFile = new File(UserProfile.getDataDirectory() + File.separator + "sync.dat");
 	}
 
 	public ArrayList<HTML> getSyncdata() {
@@ -61,12 +59,12 @@ public class Synchronizer {
 	
 	public void clearSyncData(){
 		syncdata = new ArrayList<HTML>();
-		userProfile.clearData(syncDataFile);
+		UserProfile.clearData(syncDataFile);
 	}
 	
 	public void restoreSyncData(){
 		System.out.println("Restoring sync data");
-		ArrayList<?> restoredObject = (ArrayList<?>) userProfile.restoreData(syncDataFile);
+		ArrayList<?> restoredObject = (ArrayList<?>) UserProfile.restoreData(syncDataFile);
 		ArrayList<HTML> checked = new ArrayList<HTML>();
 		
 		if(restoredObject != null) {
@@ -79,7 +77,7 @@ public class Synchronizer {
 	}
 	
 	private void saveSyncData(){
-		userProfile.saveData(syncdata, syncDataFile);
+		UserProfile.saveData(syncdata, syncDataFile);
 	}
 	
 }

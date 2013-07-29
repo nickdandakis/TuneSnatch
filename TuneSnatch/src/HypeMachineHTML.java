@@ -13,12 +13,26 @@ public class HypeMachineHTML extends HTML {
 	
 	public HypeMachineHTML(String completeURL){
 		super(completeURL);
+		
+		try {
+			createDocument();
+		} catch (IOException e) {
+			System.out.println("Failed to parse HTML.");
+			e.printStackTrace();
+		}
 	}
 	
 	public HypeMachineHTML(String area, int pagenumber){
 		super(area, pagenumber);
 		setSite("http://hypem.com/");
 		setCompleteURL(getSite() + getArea() + "/" + getPagenumber() + "/");
+		
+		try {
+			createDocument();
+		} catch (IOException e) {
+			System.out.println("Failed to parse HTML.");
+			e.printStackTrace();
+		}
 	}
 	
 	public void setCookies(Map<String, String> cookies){
@@ -29,7 +43,7 @@ public class HypeMachineHTML extends HTML {
 		return cookies;
 	}
 	
-	public Document getDocument() throws IOException{
+	public Document createDocument() throws IOException{
 		System.out.println("Scraping HypeMachine...");
 		Response res = Jsoup.connect(getCompleteURL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		setCookies(res.cookies());

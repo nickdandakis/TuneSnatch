@@ -4,7 +4,6 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-
 /*
  * Mixcloud area definition:
  * just <USERNAME> for cloudcasts (uploaded tracks)
@@ -19,15 +18,29 @@ public class MixcloudHTML extends HTML {
 	
 	public MixcloudHTML(String completeURL){
 		super(completeURL);
+		
+		try {
+			createDocument();
+		} catch (IOException e) {
+			System.out.println("Failed to parse HTML.");
+			e.printStackTrace();
+		}
 	}
 	
 	public MixcloudHTML(String area, int pagenumber) {
 		super(area, pagenumber);
 		setSite("http://mixcloud.com/");
 		setCompleteURL(getSite() + getArea() + "?page=" + getPagenumber() + "/");
+		
+		try {
+			createDocument();
+		} catch (IOException e) {
+			System.out.println("Failed to parse HTML.");
+			e.printStackTrace();
+		}
 	}
 	
-	public Document getDocument() throws IOException{
+	private void createDocument() throws IOException{
 		System.out.println("Scraping Mixcloud...");
 		Response res = Jsoup.connect(getCompleteURL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		Document doc = res.parse();
@@ -35,7 +48,7 @@ public class MixcloudHTML extends HTML {
 		if(debug)
 			saveDocument(doc);
 		
-		return doc;
+		this.setDocument(doc);
 	}
 	
 }
