@@ -53,7 +53,7 @@ public class Downloader extends Thread {
 	 * Might need to make it more robust.
 	 */
 	private boolean isDownloaded(Track track){
-		File dir = new File(".");
+		File dir = new File(UserProfile.getDownloadDirectory());
 		File[] files = dir.listFiles();
 		
 		for(File file : files){
