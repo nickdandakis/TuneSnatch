@@ -15,7 +15,7 @@ public class HypeMachineHTML extends HTML {
 		super(completeURL);
 		
 		try {
-			createDocument();
+			this.setDocument(createDocument());
 		} catch (IOException e) {
 			System.out.println("Failed to parse HTML.");
 			e.printStackTrace();
@@ -28,7 +28,7 @@ public class HypeMachineHTML extends HTML {
 		setCompleteURL(getSite() + getArea() + "/" + getPagenumber() + "/");
 		
 		try {
-			createDocument();
+			this.setDocument(createDocument());
 		} catch (IOException e) {
 			System.out.println("Failed to parse HTML.");
 			e.printStackTrace();
@@ -44,7 +44,7 @@ public class HypeMachineHTML extends HTML {
 	}
 	
 	public Document createDocument() throws IOException{
-		System.out.println("Scraping HypeMachine...");
+		System.out.println("...");
 		Response res = Jsoup.connect(getCompleteURL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		setCookies(res.cookies());
 		Document doc = res.parse();

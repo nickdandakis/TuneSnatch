@@ -20,7 +20,7 @@ public class MixcloudHTML extends HTML {
 		super(completeURL);
 		
 		try {
-			createDocument();
+			this.setDocument(createDocument());
 		} catch (IOException e) {
 			System.out.println("Failed to parse HTML.");
 			e.printStackTrace();
@@ -33,22 +33,22 @@ public class MixcloudHTML extends HTML {
 		setCompleteURL(getSite() + getArea() + "?page=" + getPagenumber() + "/");
 		
 		try {
-			createDocument();
+			this.setDocument(createDocument());
 		} catch (IOException e) {
 			System.out.println("Failed to parse HTML.");
 			e.printStackTrace();
 		}
 	}
 	
-	private void createDocument() throws IOException{
-		System.out.println("Scraping Mixcloud...");
+	private Document createDocument() throws IOException{
+		System.out.println("...");
 		Response res = Jsoup.connect(getCompleteURL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		Document doc = res.parse();
 		
 		if(debug)
 			saveDocument(doc);
 		
-		this.setDocument(doc);
+		return doc;
 	}
 	
 }

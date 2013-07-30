@@ -116,7 +116,12 @@ public class Downloader extends Thread {
 	    String filename = generateFilename(track);
 	    int exp = (int) (Math.log(conn.getContentLength()) / Math.log(1000));
 	    String tracksize = String.format("%.2f", conn.getContentLength() / Math.pow(1000, exp));
-	    File trackFile = new File(UserProfile.getDownloadDirectory() + File.separator + filename);
+	    
+	    File downloadDirectory = new File(UserProfile.getDownloadDirectory());
+		if(!downloadDirectory.exists()){
+			downloadDirectory.mkdir();
+		}
+	    File trackFile = new File(downloadDirectory.getAbsolutePath() + File.separator + filename);
 	    
 	    OutputStream outstream = new FileOutputStream(trackFile);
 	    byte[] buffer = new byte[8192];
@@ -140,7 +145,8 @@ public class Downloader extends Thread {
 		        System.out.print("KB/s ");
 	    	}
 	    }
-	    System.out.println("");
+	    if(VERBOSE)
+	    	System.out.println("");
 	    
 	    outstream.close();
 	}

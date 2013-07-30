@@ -9,7 +9,9 @@ import java.util.prefs.Preferences;
 
 public class UserProfile {
 	private static String dataDirectory;
-	static {
+	private static Preferences preferences;
+	
+	static { // Static 'constructor'
 		File datadir = new File(defaultDataDirectory() + File.separator + ".TuneSnatch");
 		if(!datadir.exists()){
 			datadir.mkdir();
@@ -18,7 +20,6 @@ public class UserProfile {
 		
 	    setPreferences(Preferences.userRoot().node(UserProfile.class.getName()));
 	}
-	private static Preferences preferences;
 	
 	private UserProfile(){
 	}
@@ -40,19 +41,19 @@ public class UserProfile {
 	}
 	
 	public static String getDownloadDirectory(){
-		return preferences.get("DOWNLOAD_DIRECTORY", System.getProperty("user.home") + File.separator + "music" + File.separator + "TuneSnatch");
+		return UserProfile.preferences.get("DOWNLOAD_DIRECTORY", System.getProperty("user.home") + File.separator + "music" + File.separator + "TuneSnatch");
 	}
 	
 	public static void setDownloadDirectory(String path){
-		preferences.put("DOWNLOAD_DIRECTORY", path);
+		UserProfile.preferences.put("DOWNLOAD_DIRECTORY", path);
 	}
 	
 	public static int getSimultaneousDownloads(){
-		return preferences.getInt("SIMULTANEOUS_DOWNLOADS", 0);
+		return UserProfile.preferences.getInt("SIMULTANEOUS_DOWNLOADS", 0);
 	}
 	
 	public static void setSimultaneousDownloads(int limit){
-		preferences.putInt("SIMULTANEOUS_DOWNLOADS", limit);
+		UserProfile.preferences.putInt("SIMULTANEOUS_DOWNLOADS", limit);
 	}
 	
 	static String defaultDataDirectory() {
