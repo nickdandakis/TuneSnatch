@@ -70,9 +70,9 @@ public class UserProfile {
 	
 	public static void saveData(Object obj, File file){
 		try {
-			@SuppressWarnings("resource")
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
 			oos.writeObject(obj);
+			oos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -83,9 +83,9 @@ public class UserProfile {
 	public static Object restoreData(File file){
 		Object obj = null;
 		try {
-			@SuppressWarnings("resource")
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
 			obj = ois.readObject();
+			ois.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found, making it now.");
 		} catch (IOException e) {

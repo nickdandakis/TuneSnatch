@@ -19,8 +19,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="Executor" project="TuneSnatch" file="/TuneSnatch/src/Executor.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
+  <class id="3" language="java" name="Processor" project="TuneSnatch" file="/TuneSnatch/src/Processor.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="785" y="169"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

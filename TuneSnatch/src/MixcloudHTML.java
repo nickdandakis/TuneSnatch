@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.Serializable;
 
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
@@ -11,7 +12,7 @@ import org.jsoup.nodes.Document;
  * <USERNAME>/<SUB_AREA>
  * where <SUB_AREA> == (activity || listens || favorites)
  */
-public class MixcloudHTML extends HTML {
+public class MixcloudHTML extends HTML implements Serializable{
 
 	private static final long serialVersionUID = 5416179481396296124L;
 	private static final boolean debug = false;	// Toggles ability to save HTML document
@@ -41,7 +42,7 @@ public class MixcloudHTML extends HTML {
 	}
 	
 	private Document createDocument() throws IOException{
-		System.out.println("...");
+		System.out.println("Working on Mixcloud...");
 		Response res = Jsoup.connect(getCompleteURL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		Document doc = res.parse();
 		

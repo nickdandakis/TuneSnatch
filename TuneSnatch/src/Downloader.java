@@ -81,10 +81,10 @@ public class Downloader extends Thread {
                 if(!isDownloaded(tracklist.getTrack(i))) {                                    
                         Thread trackDownloadThread = new Thread(new Downloader (tracklist.getTrack(i)));
                         downloaderArrayList.add(trackDownloadThread);
-                        System.out.println("Array size: "+downloaderArrayList.size());
-                        System.out.println("Thread "+j+ " About to start");
+//                        System.out.println("Array size: "+downloaderArrayList.size());
+//                        System.out.println("Thread "+j+ " About to start");
                         downloaderArrayList.get(j).start();
-                        System.out.println("Thread "+j+ " running");
+//                        System.out.println("Thread "+j+ " running");
                         j++;
                 } else {
                         System.out.println(generateFilename(tracklist.getTrack(i)) + " already downloaded");                    
@@ -92,7 +92,7 @@ public class Downloader extends Thread {
         }
         for(int k=0; k<downloaderArrayList.size(); k++) {
             downloaderArrayList.get(k).join();
-            System.out.println("*****Thread "+k+" completed*****");
+//            System.out.println("*****Thread "+k+" completed*****");
         }
         
         endTime = System.currentTimeMillis();

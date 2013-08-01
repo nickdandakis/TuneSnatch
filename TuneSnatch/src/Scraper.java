@@ -37,31 +37,46 @@ public class Scraper {
 	
 	private String filter(String unfiltered, FilterKey key){
 		Scanner scanner = new Scanner(unfiltered);
+		String filtered;
 		
 		switch (key) {
 		case HypeMachine_id:
-			return scanner.findInLine("\"id\":\"[a-z0-9]+").replaceAll("\"id\":\"", "");
+			filtered = scanner.findInLine("\"id\":\"[a-z0-9]+").replaceAll("\"id\":\"", "");
+			break;
 		case HypeMachine_key:
-			return scanner.findInLine("\"key\":\"[a-z0-9]+").replaceAll("\"key\":\"", "");
+			filtered = scanner.findInLine("\"key\":\"[a-z0-9]+").replaceAll("\"key\":\"", "");
+			break;
 		case HypeMachine_artist:
-			return scanner.findInLine("\"artist\":\"[^\"]+").replaceAll("\"artist\":\"", "");
+			filtered = scanner.findInLine("\"artist\":\"[^\"]+").replaceAll("\"artist\":\"", "");
+			break;
 		case HypeMachine_song:
-			return scanner.findInLine("\"song\":\"[^\"]+").replaceAll("\"song\":\"", "");
+			filtered = scanner.findInLine("\"song\":\"[^\"]+").replaceAll("\"song\":\"", "");
+			break;
 		case HypeMachine_posturl:
-			return scanner.findInLine("\"posturl\":\".*?\"").replaceAll("\"posturl\":\"", "").replaceAll("\\\\", "").replaceAll("\"", "");
+			filtered = scanner.findInLine("\"posturl\":\".*?\"").replaceAll("\"posturl\":\"", "").replaceAll("\\\\", "").replaceAll("\"", "");
+			break;
 		case SoundCloud_id:
-			return scanner.findInLine("\"id\":[0-9]+").replaceAll("\"id\":", "");
+			filtered = scanner.findInLine("\"id\":[0-9]+").replaceAll("\"id\":", "");
+			break;
 		case SoundCloud_username:
-			return scanner.findInLine("\"username\":\"[^\"]+").replaceAll("\"username\":\"", "");
+			filtered = scanner.findInLine("\"username\":\"[^\"]+").replaceAll("\"username\":\"", "");
+			break;
 		case SoundCloud_song:
-			return scanner.findInLine("\"title\":\"[^\"]+").replaceAll("\"title\":\"", "");
+			filtered = scanner.findInLine("\"title\":\"[^\"]+").replaceAll("\"title\":\"", "");
+			break;
 		case SoundCloud_streamUrl:
-			return scanner.findInLine("\"streamUrl\":\".*?\"").replaceAll("\"streamUrl\":\"", "").replaceAll("\"", "");
+			filtered = scanner.findInLine("\"streamUrl\":\".*?\"").replaceAll("\"streamUrl\":\"", "").replaceAll("\"", "");
+			break;
 		case SoundCloud_waveformUrl:
-			return scanner.findInLine("\"waveformUrl\":\".*?\"").replaceAll("\"waveformUrl\":\"", "").replaceAll("\"", "");
+			filtered = scanner.findInLine("\"waveformUrl\":\".*?\"").replaceAll("\"waveformUrl\":\"", "").replaceAll("\"", "");
+			break;
 		default:
-			return null;
+			filtered = null;
+			break;
 		}
+		
+		scanner.close();
+		return filtered;
 	}
 	
 	public TrackList scrapeHypeMachineTracks(HypeMachineHTML html) throws IOException{
@@ -70,7 +85,9 @@ public class Scraper {
 		
 		String[] strs = trackList.toString().split("\\[\\{", 2);
 		strs = strs[1].split("}]",2);
-		Scanner lineScanner = new Scanner(strs[0]).useDelimiter("\\},\\{");
+		Scanner lineScanner = new Scanner(strs[0]);
+		lineScanner.useDelimiter("\\},\\{");
+		
 		String trackString, id, key, artist, song, posturl;
 		
 		while (lineScanner.hasNext()){
@@ -92,6 +109,7 @@ public class Scraper {
 			tracks.addTrack(track);
 		}
 		
+		lineScanner.close();
 		return tracks;
 	}
 	
@@ -120,6 +138,7 @@ public class Scraper {
 			tracks.addTrack(track);
 		}
 		
+		scanner.close();
 		return tracks;
 	}
 	

@@ -2,11 +2,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 
 import org.jsoup.nodes.Document;
 
 
-public class HTML implements java.io.Serializable{
+public class HTML implements Serializable{
 	/**
 	 * 
 	 */

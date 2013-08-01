@@ -1,13 +1,11 @@
 import java.io.IOException;
 
-public class Executor {
+public class Processor {
 	
-	private Synchronizer sz;
 	private Downloader dw;
 	
-	public Executor() {
-		sz = new Synchronizer();
-		sz.restoreSyncData();
+	public Processor() {
+		Synchronizer.restoreData();
 		dw = new Downloader();
 	}
 	
@@ -89,7 +87,7 @@ public class Executor {
 				else if(site == Site.Mixcloud)
 					html = new MixcloudHTML(area, i);
 				
-				sz.addHTML(html);
+				Synchronizer.addHTML(html);
 			}
 		} else {
 			if(site == Site.HypeMachine)
@@ -99,7 +97,7 @@ public class Executor {
 			else if(site == Site.Mixcloud)
 				html = new MixcloudHTML(area, pages);
 			
-			sz.addHTML(html);
+			Synchronizer.addHTML(html);
 		}
 		
 		printSyncList();
@@ -112,13 +110,13 @@ public class Executor {
 	public void unsync(Site site, String area, String page){
 		int pages = Integer.parseInt(page);
 		
-		for(HTML html : sz.getSyncdata()){
+		for(HTML html : Synchronizer.getSyncdata()){
 			if(html.getArea().equalsIgnoreCase(area) && html.getPagenumber() == pages &&
 					((site == Site.HypeMachine && html instanceof HypeMachineHTML) ||
 							(site == Site.SoundCloud && html instanceof SoundCloudHTML) ||
 								(site == Site.SoundCloud && html instanceof MixcloudHTML))){
 				System.out.println("Conditions met");
-				sz.removeHTML(html);
+				Synchronizer.removeHTML(html);
 				break;
 			}
 		}
@@ -127,7 +125,7 @@ public class Executor {
 	}
 	
 	public void unsync(int index){
-		sz.removeHTML(--index); // Sync list is displayed to user with start index as 1 (not 0)
+		Synchronizer.removeHTML(--index); // Sync list is displayed to user with start index as 1 (not 0)
 		printSyncList();
 	}
 	
@@ -136,7 +134,7 @@ public class Executor {
 	 * Downloader object avoids downloading already downloaded tracks.
 	 */
 	public void pull(){
-		for(HTML html : sz.getSyncdata()){
+		for(HTML html : Synchronizer.getSyncdata()){
 			download(html);
 		}
 	}
@@ -146,11 +144,11 @@ public class Executor {
 	}
 	
 	public void printSyncList() {
-		sz.printSyncData();
+		Synchronizer.printData();
 	}
 	
 	public void clearSyncList(){
-		sz.clearSyncData();
+		Synchronizer.clearData();
 	}
 	
 	// TODO Only works for UNIX 

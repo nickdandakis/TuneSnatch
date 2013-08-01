@@ -1,70 +1,74 @@
 import java.io.File;
 import java.util.ArrayList;
 
-
 public class Synchronizer {
 
-	private ArrayList<HTML> syncdata = new ArrayList<HTML>();
-	private File syncDataFile;
+	private static ArrayList<HTML> data = new ArrayList<HTML>();
+	private static File dataFile;
 	
-	public Synchronizer() {
-		syncDataFile = new File(UserProfile.getDataDirectory() + File.separator + "sync.dat");
+	static{
+		dataFile = new File(UserProfile.getDataDirectory() + File.separator + "sync.dat");
+	}
+	private Synchronizer() {
+		
 	}
 
-	public ArrayList<HTML> getSyncdata() {
-		return syncdata;
+	public static ArrayList<HTML> getSyncdata() {
+		return data;
 	}
 
-	public void setSyncdata(ArrayList<HTML> syncdata) {
-		this.syncdata = syncdata;
+	public static void setSyncdata(ArrayList<HTML> syncdata) {
+		Synchronizer.data = syncdata;
 	}
 
-	public void addHTML(HTML html){
+	public static void addHTML(HTML html){
 		//Add validation
 		boolean exists = false;
-		for(HTML syncdhtml : syncdata){
+		for(HTML syncdhtml : data){
 			if(syncdhtml.getCompleteURL().equalsIgnoreCase(html.getCompleteURL())){
 				exists = true;
 				break;
 			}
 		}
 
-		if(!exists)
-			syncdata.add(html);
+		if(!exists){
+			html.setDocument(null); // Because jsoup.org.Document is not serializable...
+			data.add(html);
+		}
 		else
 			System.out.println(html.getCompleteURL() + " is already kept track of");
 		
-		saveSyncData();
+		saveData();
 	}
 	
-	public void removeHTML(HTML html){
-		syncdata.remove(html);
-		saveSyncData();
+	public static void removeHTML(HTML html){
+		data.remove(html);
+		saveData();
 	}
 	
-	public void removeHTML(int index){
-		syncdata.remove(index);
-		saveSyncData();
+	public static void removeHTML(int index){
+		data.remove(index);
+		saveData();
 	}
 	
-	public void printSyncData(){
+	public static void printData(){
 		int i=0;
-		for(HTML html : syncdata){
+		for(HTML html : data){
 			System.out.print(String.format("[%d]: ", ++i));
 			System.out.println(html.getCompleteURL());
 		}
-		if(syncdata.size() == 0)
+		if(data.size() == 0)
 			System.out.println("Not keeping track of anything. ");
 	}
 	
-	public void clearSyncData(){
-		syncdata = new ArrayList<HTML>();
-		UserProfile.clearData(syncDataFile);
+	public static void clearData(){
+		data = new ArrayList<HTML>();
+		UserProfile.clearData(dataFile);
 	}
 	
-	public void restoreSyncData(){
+	public static void restoreData(){
 		System.out.println("Restoring sync data");
-		ArrayList<?> restoredObject = (ArrayList<?>) UserProfile.restoreData(syncDataFile);
+		ArrayList<?> restoredObject = (ArrayList<?>) UserProfile.restoreData(dataFile);
 		ArrayList<HTML> checked = new ArrayList<HTML>();
 		
 		if(restoredObject != null) {
@@ -72,12 +76,12 @@ public class Synchronizer {
 				if(obj instanceof HTML)
 					checked.add((HTML) obj);
 			}
-			syncdata = checked;
+			data = checked;
 		}
 	}
 	
-	private void saveSyncData(){
-		UserProfile.saveData(syncdata, syncDataFile);
+	private static void saveData(){
+		UserProfile.saveData(data, dataFile);
 	}
 	
 }

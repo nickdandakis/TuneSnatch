@@ -5,14 +5,14 @@ import java.util.Scanner;
 public class CommandLine {
 	// System Input scanner object
 	Scanner in = new Scanner(new InputStreamReader(System.in));
-	Executor exe;
+	Processor exe;
 	
 	/**
 	 * Constructor for CommandLine object.
 	 * Initializes Synchronizer object and restores SyncData from file
 	 */
 	public CommandLine() {
-		exe = new Executor();
+		exe = new Processor();
 	}
 	
 	private void prompt(){

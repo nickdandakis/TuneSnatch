@@ -1,11 +1,16 @@
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 
-public class HypeMachineTrack extends Track {
+public class HypeMachineTrack extends Track implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3765563432705431846L;
 	private static String HYPEM_SERVE_URL = "http://hypem.com/serve/source/";
 	private String key;
 	private String postURL;
