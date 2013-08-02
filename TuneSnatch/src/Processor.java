@@ -1,9 +1,18 @@
 import java.io.IOException;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.jsoup.HttpStatusException;
 
 public class Processor {
 	
 	private Downloader dw;
-	
+	ExecutorService threadPool = Executors.newFixedThreadPool(UserProfile.getSimultaneousDownloads());
+	CompletionService<HTML> pool = new ExecutorCompletionService<HTML>(threadPool);
+			
 	public Processor() {
 		Synchronizer.restoreData();
 		dw = new Downloader();
@@ -30,29 +39,40 @@ public class Processor {
 		if(pages != 0){
 			try {
 				for(int i=1; i<=pages; i++){
-					if(site == Site.HypeMachine)
-						html = new HypeMachineHTML(area, i);
-					else if(site == Site.SoundCloud)
-						html = new SoundCloudHTML(area, i);
-					else if(site == Site.Mixcloud)
-						html = new MixcloudHTML(area, i);
-					
-					tracklist.addTracks(html);
-					System.out.println("Tracks added from page " + i + " from " + " " + site + "/" + html.getArea());
+					pool.submit(new Task(site, area, i));
 				}
+				
+				for(int i=1; i<=pages; i++){
+					html = pool.take().get();
+					tracklist.addTracks(html);
+					System.out.println(html.toString());
+				}
+				
+				threadPool.shutdown();
 			} catch (IOException e) {
 				System.out.println("Invalid HTTP request");
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
 			}
 		} else {
 			try {
 				for(int i=1; ; i++){
 					if(site == Site.HypeMachine)
-						html = new HypeMachineHTML(area, i);
+						try{
+							html = new HypeMachineHTML(area, i);
+						} catch (HttpStatusException e){ // Hit 404
+							System.out.println("Hit a wall!");
+							break;
+						}
 					else if(site == Site.SoundCloud)
 						html = new SoundCloudHTML(area, i);
 					else if(site == Site.Mixcloud)
 						html = new MixcloudHTML(area, i);
 					
+					if(html.getDocument() == null)
+						break;
 					if(html.getDocument().toString().length() < 40000)
 						break;
 					tracklist.addTracks(html);
@@ -81,7 +101,11 @@ public class Processor {
 		if(pages != 0){
 			for(int i=1; i<=pages; i++){
 				if(site == Site.HypeMachine)
-					html = new HypeMachineHTML(area, i);
+					try {
+						html = new HypeMachineHTML(area, i);
+					} catch (HttpStatusException e) { // Error 404
+						e.printStackTrace();
+					}
 				else if(site == Site.SoundCloud)
 					html = new SoundCloudHTML(area, i);
 				else if(site == Site.Mixcloud)
@@ -91,7 +115,11 @@ public class Processor {
 			}
 		} else {
 			if(site == Site.HypeMachine)
-				html = new HypeMachineHTML(area, pages);
+				try {
+					html = new HypeMachineHTML(area, pages);
+				} catch (HttpStatusException e) { // Error 404
+					e.printStackTrace();
+				}
 			else if(site == Site.SoundCloud)
 				html = new SoundCloudHTML(area, pages);
 			else if(site == Site.Mixcloud)
@@ -158,6 +186,12 @@ public class Processor {
 	}
 	
 	public void changeDownloadDirectory(String path){
+		System.out.println("Setting new download directory path preference...");
 		UserProfile.setDownloadDirectory(path);
+	}
+
+	public void changeSimultaenousDownloads(String number) {
+		System.out.println("Setting new simultaneous downloads limit preference...");
+		UserProfile.setSimultaneousDownloads(Integer.valueOf(number));
 	}
 }

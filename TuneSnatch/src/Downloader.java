@@ -53,17 +53,26 @@ public class Downloader extends Thread {
 	 * Might need to make it more robust.
 	 */
 	private boolean isDownloaded(Track track){
+		boolean emptyDir = false;
+		File downloadDirectory = new File(UserProfile.getDownloadDirectory());
+		if(!downloadDirectory.exists()){
+			downloadDirectory.mkdir();
+			emptyDir = true;
+		}
+		
 		File dir = new File(UserProfile.getDownloadDirectory());
 		File[] files = dir.listFiles();
 		
-		for(File file : files){
-//			try {
-				if(file.getName().equalsIgnoreCase(generateFilename(track))) //&& 
-//                                    file.length() == getFilesize(track))
-                                    return true;
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
+		if(!emptyDir){
+			for(File file : files){
+//				try {
+					if(file.getName().equalsIgnoreCase(generateFilename(track))) //&& 
+//	                                    file.length() == getFilesize(track))
+	                                    return true;
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+			}
 		}
 		
 		return false;
@@ -118,9 +127,6 @@ public class Downloader extends Thread {
 	    String tracksize = String.format("%.2f", conn.getContentLength() / Math.pow(1000, exp));
 	    
 	    File downloadDirectory = new File(UserProfile.getDownloadDirectory());
-		if(!downloadDirectory.exists()){
-			downloadDirectory.mkdir();
-		}
 	    File trackFile = new File(downloadDirectory.getAbsolutePath() + File.separator + filename);
 	    
 	    OutputStream outstream = new FileOutputStream(trackFile);

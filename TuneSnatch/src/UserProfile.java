@@ -49,7 +49,7 @@ public class UserProfile {
 	}
 	
 	public static int getSimultaneousDownloads(){
-		return UserProfile.preferences.getInt("SIMULTANEOUS_DOWNLOADS", 0);
+		return UserProfile.preferences.getInt("SIMULTANEOUS_DOWNLOADS", 5);
 	}
 	
 	public static void setSimultaneousDownloads(int limit){
