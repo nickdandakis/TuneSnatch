@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Scanner;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -91,7 +92,7 @@ public class Scraper {
 		String trackString, id, key, artist, song, posturl;
 		
 		while (lineScanner.hasNext()){
-			trackString = lineScanner.next();
+			trackString = StringEscapeUtils.unescapeJava(lineScanner.next()); // unescape unicode
 			
 			id = filter(trackString, FilterKey.HypeMachine_id);
 			key = filter(trackString, FilterKey.HypeMachine_key);
@@ -120,7 +121,7 @@ public class Scraper {
 		String trackString, username, song, streamUrl, waveformUrl, id;
 		
 		for(int i = countSubstring("window.SC.bufferTracks.push", htmlstring); i>0; i--){
-			trackString = scanner.findWithinHorizon("window.SC.bufferTracks.push\\(\\{[^<]+", 0);
+			trackString = StringEscapeUtils.unescapeJava(scanner.findWithinHorizon("window.SC.bufferTracks.push\\(\\{[^<]+", 0)); // unescape unicode
 			
 			id = filter(trackString, FilterKey.SoundCloud_id);
 			song = filter(trackString, FilterKey.SoundCloud_song);
@@ -162,8 +163,8 @@ public class Scraper {
 		
 		String song, username, previewUrl, coverUrl, id; 
 		for(int i=0; i<previewURLs.size(); i++){
-			song = filter(songs.get(i), FilterKey.Mixcloud_song);
-			username = filter(usernames.get(i), FilterKey.Mixcloud_username); 
+			song = StringEscapeUtils.unescapeJava(filter(songs.get(i), FilterKey.Mixcloud_song));
+			username = StringEscapeUtils.unescapeJava(filter(usernames.get(i), FilterKey.Mixcloud_username)); 
 			previewUrl = filter(previewURLs.get(i), FilterKey.Mixcloud_previewUrl);
 			id = previewUrl.replaceAll(".+\\/.+\\/", "").replaceAll(".mp3", ""); // filename is track ID because Mixcloud doesn't do IDs.
 			coverUrl = filter(covers.get(i), FilterKey.Mixcloud_coverUrl);

@@ -25,8 +25,9 @@ public class HypeMachineTrack extends Track implements Serializable {
 		try {
 			this.setStreamURL(generateStreamURL());
 		} catch (IOException e) {
-			System.out.println("Failed to generate Hypemachine stream URL.");
-			e.printStackTrace();
+			System.out.println("Failed to generate Hypemachine stream URL for track:");
+			System.out.printf("%s - %s", this.getSong(), this.getArtist());
+			System.out.println("HypeMachine probably doesn't serve this track anymore. :(");
 		}
 	}
 

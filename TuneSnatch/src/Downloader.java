@@ -3,6 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -110,51 +111,61 @@ public class Downloader extends Thread {
     }
 
 	public void downloadTrack(Track track) throws IOException {
-        String url = track.getStreamURL();		
-        URLConnection conn = new URL(url).openConnection();
-	    InputStream is = conn.getInputStream();
-	    
-    	int filesize = conn.getContentLength();
-	    long startTime = System.nanoTime();
-	    final double NANOS_PER_SECOND = 1000000000.0;
-	    final double BYTES_PER_MIB = 1024;
-	    double speed = 0;
-	    float totalDataWritten = 0;
-	    float percentage = 0;
-	    
-	    String filename = generateFilename(track);
-	    int exp = (int) (Math.log(conn.getContentLength()) / Math.log(1000));
-	    String tracksize = String.format("%.2f", conn.getContentLength() / Math.pow(1000, exp));
-	    
-	    File downloadDirectory = new File(UserProfile.getDownloadDirectory());
-	    File trackFile = new File(downloadDirectory.getAbsolutePath() + File.separator + filename);
-	    
-	    OutputStream outstream = new FileOutputStream(trackFile);
-	    byte[] buffer = new byte[8192];
-	    int len;
-	    System.out.println("Downloading " + filename + " [" + (tracksize) + " MB]");
-	    if(VERBOSE)
-	    	System.out.print("0%");
-	    while ((len = is.read(buffer)) > 0) {
-	    	outstream.write(buffer, 0, len);
-	    	
-	    	if(VERBOSE){
-	    		totalDataWritten += len;
-		        percentage = (totalDataWritten * 100) / filesize;
-		        speed = NANOS_PER_SECOND / BYTES_PER_MIB * totalDataWritten / (System.nanoTime() - startTime + 1);
-		        String speedString = String.format("%.2f", speed); 
-		        
-		        System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"); // Back, back, back dat ass up
-		        System.out.print((int) percentage);
-		        System.out.print("% ");
-		        System.out.print(speedString);
-		        System.out.print("KB/s ");
-	    	}
-	    }
-	    if(VERBOSE)
-	    	System.out.println("");
-	    
-	    outstream.close();
+        String url = track.getStreamURL();
+        URLConnection conn = null;
+        boolean malformedURL = false;
+        
+        try{
+        	conn = new URL(url).openConnection();
+        } catch (MalformedURLException e){
+        	malformedURL = true; 
+        }
+        
+        if(!malformedURL){
+        	InputStream is = conn.getInputStream();
+    	    
+        	int filesize = conn.getContentLength();
+    	    long startTime = System.nanoTime();
+    	    final double NANOS_PER_SECOND = 1000000000.0;
+    	    final double BYTES_PER_MIB = 1024;
+    	    double speed = 0;
+    	    float totalDataWritten = 0;
+    	    float percentage = 0;
+    	    
+    	    String filename = generateFilename(track);
+    	    int exp = (int) (Math.log(conn.getContentLength()) / Math.log(1000));
+    	    String tracksize = String.format("%.2f", conn.getContentLength() / Math.pow(1000, exp));
+    	    
+    	    File downloadDirectory = new File(UserProfile.getDownloadDirectory());
+    	    File trackFile = new File(downloadDirectory.getAbsolutePath() + File.separator + filename);
+    	    
+    	    OutputStream outstream = new FileOutputStream(trackFile);
+    	    byte[] buffer = new byte[8192];
+    	    int len;
+    	    System.out.println("Downloading " + filename + " [" + (tracksize) + " MB]");
+    	    if(VERBOSE)
+    	    	System.out.print("0%");
+    	    while ((len = is.read(buffer)) > 0) {
+    	    	outstream.write(buffer, 0, len);
+    	    	
+    	    	if(VERBOSE){
+    	    		totalDataWritten += len;
+    		        percentage = (totalDataWritten * 100) / filesize;
+    		        speed = NANOS_PER_SECOND / BYTES_PER_MIB * totalDataWritten / (System.nanoTime() - startTime + 1);
+    		        String speedString = String.format("%.2f", speed); 
+    		        
+    		        System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"); // Back, back, back dat ass up
+    		        System.out.print((int) percentage);
+    		        System.out.print("% ");
+    		        System.out.print(speedString);
+    		        System.out.print("KB/s ");
+    	    	}
+    	    }
+    	    if(VERBOSE)
+    	    	System.out.println("");
+    	    
+    	    outstream.close();
+        }
 	}
 	/** END OF MAIN METHODS **/
 }

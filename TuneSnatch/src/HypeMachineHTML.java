@@ -50,6 +50,8 @@ public class HypeMachineHTML extends HTML {
 		setCookies(res.cookies());
 		Document doc = res.parse();
 		
+		System.out.println(doc.outputSettings().charset().name());
+		
 		if(debug)
 			saveDocument(doc);
 		

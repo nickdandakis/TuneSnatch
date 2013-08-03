@@ -36,6 +36,7 @@ public class Processor {
 		TrackList tracklist = new TrackList();
 		HTML html = null;
 		
+		
 		if(pages != 0){
 			try {
 				for(int i=1; i<=pages; i++){
@@ -47,8 +48,6 @@ public class Processor {
 					tracklist.addTracks(html);
 					System.out.println(html.toString());
 				}
-				
-				threadPool.shutdown();
 			} catch (IOException e) {
 				System.out.println("Invalid HTTP request");
 			} catch (InterruptedException e) {
