@@ -11,7 +11,8 @@ public class Processor {
 	
 	private Downloader dw;
 	ExecutorService threadPool = Executors.newFixedThreadPool(UserProfile.getSimultaneousDownloads());
-	CompletionService<HTML> pool = new ExecutorCompletionService<HTML>(threadPool);
+	CompletionService<TrackList> scrapePool = new ExecutorCompletionService<TrackList>(threadPool);
+	CompletionService<HTML> htmlPool = new ExecutorCompletionService<HTML>(threadPool);
 			
 	public Processor() {
 		Synchronizer.restoreData();
@@ -34,15 +35,16 @@ public class Processor {
 		if(pages != 0){
 			try {
 				for(int i=1; i<=pages; i++)
-					pool.submit(new Task(site, area, i));
+					htmlPool.submit(new HTMLTask(site, area, i));
 				
 				for(int i=1; i<=pages; i++){
-					html = pool.take().get();
-					tracklist.addTracks(html);
-					System.out.println(html.toString());
+					html = htmlPool.take().get();
+					scrapePool.submit(new ScrapeTask(html));
 				}
-			} catch (IOException e) {
-				System.out.println("Invalid HTTP request");
+				
+				for(int i=1; i<=pages; i++){
+					tracklist.addTracks(scrapePool.take().get());
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ExecutionException e) {
@@ -138,6 +140,7 @@ public class Processor {
 	public void pull(){
 		for(HTML html : Synchronizer.getSyncdata()){
 			download(html);
+			// TODO Multithread this bitch
 		}
 	}
 	

@@ -49,7 +49,6 @@ public class HypeMachineHTML extends HTML {
 		Response res = Jsoup.connect(getCompleteURL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		setCookies(res.cookies());
 		Document doc = res.parse();
-		
 		if(debug)
 			saveDocument(doc);
 		

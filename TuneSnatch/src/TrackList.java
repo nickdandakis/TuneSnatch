@@ -4,10 +4,8 @@ import java.util.ArrayList;
 public class TrackList {
 	
 	private ArrayList<Track> tracks = new ArrayList<Track>();
-	private Scraper scraper;
 	
 	public TrackList() {
-		scraper = new Scraper();
 	}
 	
 	public Track getTrack(int i){
@@ -30,11 +28,11 @@ public class TrackList {
 	
 	public void addTracks(HTML html) throws IOException{
 		if(html.getClass() == HypeMachineHTML.class){
-			addTracks(scraper.scrapeHypeMachineTracks((HypeMachineHTML) html));
+			addTracks(Scraper.scrapeHypeMachineTracks((HypeMachineHTML) html));
 		} else if(html.getClass() == SoundCloudHTML.class) {
-			addTracks(scraper.scrapeSoundCloudTracks((SoundCloudHTML) html));
+			addTracks(Scraper.scrapeSoundCloudTracks((SoundCloudHTML) html));
 		} else if (html.getClass() == MixcloudHTML.class) {
-			addTracks(scraper.scrapeMixcloudTracks((MixcloudHTML) html));
+			addTracks(Scraper.scrapeMixcloudTracks((MixcloudHTML) html));
 		}
 	}
 }

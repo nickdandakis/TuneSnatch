@@ -18,10 +18,10 @@ public class Scraper {
 	}
 	private static final boolean debug = false;	// Toggles ability to print out track fields
 	
-	public Scraper() {
+	private Scraper() {
 	}
 	
-	private String filter(Element unfiltered, FilterKey key){
+	private static String filter(Element unfiltered, FilterKey key){
 		switch (key){
 		case Mixcloud_song:
 			return unfiltered.attr("title");
@@ -36,7 +36,7 @@ public class Scraper {
 		}
 	}
 	
-	private String filter(String unfiltered, FilterKey key){
+	private static String filter(String unfiltered, FilterKey key){
 		Scanner scanner = new Scanner(unfiltered);
 		String filtered;
 		
@@ -80,7 +80,7 @@ public class Scraper {
 		return filtered;
 	}
 	
-	public TrackList scrapeHypeMachineTracks(HypeMachineHTML html) throws IOException{
+	public static TrackList scrapeHypeMachineTracks(HypeMachineHTML html) throws IOException{
 		TrackList tracks = new TrackList();
 		Element trackList = html.getDocument().getElementById("displayList-data");
 		
@@ -114,7 +114,7 @@ public class Scraper {
 		return tracks;
 	}
 	
-	public TrackList scrapeSoundCloudTracks(SoundCloudHTML html) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+	public static TrackList scrapeSoundCloudTracks(SoundCloudHTML html) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		TrackList tracks = new TrackList();
 		String htmlstring = html.getDocument().toString();
 		Scanner scanner = new Scanner(htmlstring);
@@ -143,7 +143,7 @@ public class Scraper {
 		return tracks;
 	}
 	
-	public TrackList scrapeMixcloudTracks(MixcloudHTML html) throws IOException{
+	public static TrackList scrapeMixcloudTracks(MixcloudHTML html) throws IOException{
 		TrackList tracks = new TrackList();
 		Document doc = html.getDocument();
 		Elements previewURLs = doc.getElementsByAttribute("data-preview-url");
@@ -182,7 +182,7 @@ public class Scraper {
 	/*
 	 * Helper method for SoundCloud tracks filtering
 	 */
-	private int countSubstring(String subStr, String str){
+	private static int countSubstring(String subStr, String str){
 		return (str.length() - str.replace(subStr, "").length()) / subStr.length();
 	}
 }
