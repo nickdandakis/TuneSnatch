@@ -12,7 +12,7 @@ public class HTML implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -7381759251822881043L;
-	private String site;
+	private Site site;
 	private String area;
 	private int pagenumber;
 	private String completeURL;
@@ -28,11 +28,11 @@ public class HTML implements Serializable{
 		breakdownCompleteURL(this.completeURL);
 	}
 
-	public String getSite() {
+	public Site getSite() {
 		return site;
 	}
 
-	public void setSite(String site) {
+	public void setSite(Site site) {
 		this.site = site;
 	}
 
@@ -61,8 +61,15 @@ public class HTML implements Serializable{
 	}
 
 	private void breakdownCompleteURL(String completeURL) {
-		setSite(completeURL.replaceAll(".com/.+", ".com/"));
+		if(completeURL.contains(Site.HypeMachine.getURL()))
+			setSite(Site.HypeMachine);
+		else if(completeURL.contains(Site.SoundCloud.getURL()))
+			setSite(Site.SoundCloud);
+		else if(completeURL.contains(Site.Mixcloud.getURL()))
+			setSite(Site.Mixcloud);
+		
 		setArea(completeURL.replaceAll(".+.com/", ""));
+		
 		if(area.endsWith("/"))
 			area = area.substring(0, area.length()-1);
 	}

@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 
 import org.jsoup.Jsoup;
@@ -10,7 +9,7 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-public class SoundCloudHTML extends HTML implements Serializable {
+public class SoundCloudHTML extends HTML {
 
 	private static final long serialVersionUID = 5589093030331078854L;
 	private static final boolean debug = false; // Toggles ability to save HTML document
@@ -28,8 +27,8 @@ public class SoundCloudHTML extends HTML implements Serializable {
 	
 	public SoundCloudHTML(String area, int pagenumber) {
 		super(area, pagenumber);
-		setSite("https://soundcloud.com/");
-		setCompleteURL(getSite() + getArea() + "?format=html&page=" + getPagenumber() + "/");
+		setSite(Site.SoundCloud);
+		setCompleteURL(getSite().getURL() + getArea() + "?format=html&page=" + getPagenumber() + "/");
 		
 		try {
 			this.setDocument(createDocument());

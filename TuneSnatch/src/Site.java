@@ -1,6 +1,12 @@
 
 public enum Site {
-	HypeMachine, SoundCloud, Mixcloud, Invalid;
+	HypeMachine("http://hypem.com/", "HypeMachine"),
+	SoundCloud("https://soundcloud.com/", "SoundCloud"),
+	Mixcloud("http://mixcloud.com/", "Mixcloud"),
+	Invalid("", "");
+	
+	private final String URL;
+	private final String name;
 	
 	static Site recognize(String string){
 		if(string.equalsIgnoreCase("HypeMachine"))
@@ -11,5 +17,18 @@ public enum Site {
 			return Mixcloud;
 		else
 			return Invalid;
+	}
+	
+	private Site(String URL, String name){
+		this.URL = URL;
+		this.name= name;
+	}
+	
+	String getURL(){
+		return URL;
+	}
+	
+	public String toString(){
+		return name;
 	}
 }

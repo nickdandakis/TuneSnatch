@@ -30,8 +30,8 @@ public class MixcloudHTML extends HTML implements Serializable{
 	
 	public MixcloudHTML(String area, int pagenumber) {
 		super(area, pagenumber);
-		setSite("http://mixcloud.com/");
-		setCompleteURL(getSite() + getArea() + "?page=" + getPagenumber() + "/");
+		setSite(Site.Mixcloud);
+		setCompleteURL(getSite().getURL() + getArea() + "?page=" + getPagenumber() + "/");
 		
 		try {
 			this.setDocument(createDocument());

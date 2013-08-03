@@ -33,7 +33,7 @@ public class CommandLine {
 		System.out.println("cls");
 		System.out.println("exit");
 		System.out.println("\nNumber of pages == 0 means all pages.\n<SITE> == HypeMachine || SoundCloud (case-sensitive) \n");
-		System.out.println("For HypeMachine: <AREA/SUBAREA> == popular || <USERNAME>");
+		System.out.println("For HypeMachine: <AREA/SUBAREA> == popular || <USERNAME> || artist/<ARTIST>");
 		System.out.println("For SoundCloud: <AREA/SUBAREA> == <USERNAME>/[favorites || tracks]");
 		System.out.println("For Mixcloud: <AREA/SUBAREA> == <USERNAME>/[activity || listens || favorites || null]");
 	}

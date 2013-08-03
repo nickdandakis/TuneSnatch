@@ -25,7 +25,10 @@ public class Synchronizer {
 		//Add validation
 		boolean exists = false;
 		for(HTML syncdhtml : data){
-			if(syncdhtml.getCompleteURL().equalsIgnoreCase(html.getCompleteURL())){
+			if(html.getArea().equalsIgnoreCase(syncdhtml.getArea()) && html.getPagenumber() == syncdhtml.getPagenumber() &&
+					((syncdhtml.getSite() == Site.HypeMachine && html.getSite() == Site.HypeMachine) ||
+							(syncdhtml.getSite() == Site.SoundCloud && html.getSite() == Site.SoundCloud) ||
+								(syncdhtml.getSite() == Site.Mixcloud && html.getSite() == Site.Mixcloud))){
 				exists = true;
 				break;
 			}
@@ -36,7 +39,7 @@ public class Synchronizer {
 			data.add(html);
 		}
 		else
-			System.out.println(html.getCompleteURL() + " is already kept track of");
+			System.out.println(html.toString() + "\nis already kept track of");
 		
 		saveData();
 	}
@@ -54,8 +57,7 @@ public class Synchronizer {
 	public static void printData(){
 		int i=0;
 		for(HTML html : data){
-			System.out.print(String.format("[%d]: ", ++i));
-			System.out.println(html.getCompleteURL());
+			System.out.printf("[%d] %s - %s - %d\n", ++i, html.getSite().toString(), html.getArea(), html.getPagenumber());
 		}
 		if(data.size() == 0)
 			System.out.println("Not keeping track of anything. ");

@@ -25,8 +25,8 @@ public class HypeMachineHTML extends HTML {
 	
 	public HypeMachineHTML(String area, int pagenumber) throws HttpStatusException{
 		super(area, pagenumber);
-		setSite("http://hypem.com/");
-		setCompleteURL(getSite() + getArea() + "/" + getPagenumber() + "/");
+		setSite(Site.HypeMachine);
+		setCompleteURL(getSite().getURL() + getArea() + "/" + getPagenumber() + "/");
 		
 		try {
 			this.setDocument(createDocument());
@@ -49,8 +49,6 @@ public class HypeMachineHTML extends HTML {
 		Response res = Jsoup.connect(getCompleteURL()).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0").execute();
 		setCookies(res.cookies());
 		Document doc = res.parse();
-		
-		System.out.println(doc.outputSettings().charset().name());
 		
 		if(debug)
 			saveDocument(doc);

@@ -19,12 +19,7 @@ public class Processor {
 	}
 	
 	public void download (HTML html){
-		if(html.getSite().equalsIgnoreCase("http://hypem.com/"))
-			download(Site.HypeMachine, html.getArea(), String.valueOf(html.getPagenumber()));
-		else if(html.getSite().equalsIgnoreCase("https://soundcloud.com/"))
-			download(Site.SoundCloud, html.getArea(), String.valueOf(html.getPagenumber()));
-		else if(html.getSite().equalsIgnoreCase("http://mixcloud.com/"))
-			download(Site.Mixcloud, html.getArea(), String.valueOf(html.getPagenumber()));
+		download(html.getSite(), html.getArea(), String.valueOf(html.getPagenumber()));
 	}
 
 	/*
@@ -36,12 +31,10 @@ public class Processor {
 		TrackList tracklist = new TrackList();
 		HTML html = null;
 		
-		
 		if(pages != 0){
 			try {
-				for(int i=1; i<=pages; i++){
+				for(int i=1; i<=pages; i++)
 					pool.submit(new Task(site, area, i));
-				}
 				
 				for(int i=1; i<=pages; i++){
 					html = pool.take().get();
@@ -99,31 +92,13 @@ public class Processor {
 		
 		if(pages != 0){
 			for(int i=1; i<=pages; i++){
-				if(site == Site.HypeMachine)
-					try {
-						html = new HypeMachineHTML(area, i);
-					} catch (HttpStatusException e) { // Error 404
-						e.printStackTrace();
-					}
-				else if(site == Site.SoundCloud)
-					html = new SoundCloudHTML(area, i);
-				else if(site == Site.Mixcloud)
-					html = new MixcloudHTML(area, i);
-				
+				html = new HTML(area, i);
+				html.setSite(site);
 				Synchronizer.addHTML(html);
 			}
 		} else {
-			if(site == Site.HypeMachine)
-				try {
-					html = new HypeMachineHTML(area, pages);
-				} catch (HttpStatusException e) { // Error 404
-					e.printStackTrace();
-				}
-			else if(site == Site.SoundCloud)
-				html = new SoundCloudHTML(area, pages);
-			else if(site == Site.Mixcloud)
-				html = new MixcloudHTML(area, pages);
-			
+			html = new HTML(area, pages);
+			html.setSite(site);
 			Synchronizer.addHTML(html);
 		}
 		
@@ -139,9 +114,9 @@ public class Processor {
 		
 		for(HTML html : Synchronizer.getSyncdata()){
 			if(html.getArea().equalsIgnoreCase(area) && html.getPagenumber() == pages &&
-					((site == Site.HypeMachine && html instanceof HypeMachineHTML) ||
-							(site == Site.SoundCloud && html instanceof SoundCloudHTML) ||
-								(site == Site.SoundCloud && html instanceof MixcloudHTML))){
+					((site == Site.HypeMachine && html.getSite() == Site.HypeMachine) ||
+							(site == Site.SoundCloud && html.getSite() == Site.SoundCloud) ||
+								(site == Site.Mixcloud && html.getSite() == Site.Mixcloud))){
 				System.out.println("Conditions met");
 				Synchronizer.removeHTML(html);
 				break;
