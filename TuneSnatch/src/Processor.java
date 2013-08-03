@@ -9,14 +9,13 @@ import org.jsoup.HttpStatusException;
 
 public class Processor {
 	
-	private Downloader dw;
 	ExecutorService threadPool = Executors.newFixedThreadPool(UserProfile.getSimultaneousDownloads());
 	CompletionService<TrackList> scrapePool = new ExecutorCompletionService<TrackList>(threadPool);
 	CompletionService<HTML> htmlPool = new ExecutorCompletionService<HTML>(threadPool);
+	CompletionService<Boolean> downloadPool = new ExecutorCompletionService<Boolean>(threadPool);
+	CompletionService<Boolean> processorPool = new ExecutorCompletionService<Boolean>(threadPool);
 			
 	public Processor() {
-		Synchronizer.restoreData();
-		dw = new Downloader();
 	}
 	
 	public void download (HTML html){
@@ -76,13 +75,17 @@ public class Processor {
 				System.out.println("Invalid HTTP request");
 			}
 		}
-
-		try {
-			dw.downloadTracks(tracklist);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		for(int i=0; i<tracklist.getSize(); i++){
+			downloadPool.submit(new DownloadTask(tracklist.getTrack(i)));
+		}
+		
+		for(int i=0; i<tracklist.getSize(); i++){
+			try {
+				downloadPool.take().get();
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	/*
@@ -92,17 +95,9 @@ public class Processor {
 		int pages = Integer.valueOf(page);
 		HTML html = null;
 		
-		if(pages != 0){
-			for(int i=1; i<=pages; i++){
-				html = new HTML(area, i);
-				html.setSite(site);
-				Synchronizer.addHTML(html);
-			}
-		} else {
-			html = new HTML(area, pages);
-			html.setSite(site);
-			Synchronizer.addHTML(html);
-		}
+		html = new HTML(area, pages);
+		html.setSite(site);
+		Synchronizer.addHTML(html);
 		
 		printSyncList();
 		System.out.println("Execute a 'pull' command if you want to start downloading tracks");
@@ -139,8 +134,16 @@ public class Processor {
 	 */
 	public void pull(){
 		for(HTML html : Synchronizer.getSyncdata()){
-			download(html);
-			// TODO Multithread this bitch
+			System.out.println("Submit");
+			processorPool.submit(new ProcessorTask(html));
+		}
+		
+		for(@SuppressWarnings("unused") HTML html : Synchronizer.getSyncdata()){
+			try {
+				processorPool.take().get();
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

@@ -12,6 +12,7 @@ public class CommandLine {
 	 * Initializes Synchronizer object and restores SyncData from file
 	 */
 	public CommandLine() {
+		Synchronizer.restoreData();
 		processor = new Processor();
 	}
 	
@@ -41,7 +42,7 @@ public class CommandLine {
 	/*
 	 * aka main() for this CommandLine object
 	 */
-	public void launch(){
+	public void run(){
 		// Little launch message
 		System.out.println("TuneSnatch - Grounding your favorite tunes in the cloud!");
 		System.out.println("Synchronize HypeMachine and SoundCloud");
@@ -81,6 +82,8 @@ public class CommandLine {
 					processor.printNewtracks();
 				else if(args[0].equalsIgnoreCase("unsync"))
 					processor.unsync(Integer.valueOf(args[1]));
+				else if(args[0].equalsIgnoreCase("config") && args[1].equalsIgnoreCase("SIMULTANEOUS_DOWNLOADS"))
+					System.out.printf("SIMULTANEOUS_DOWNLOADS = %d\n", UserProfile.getSimultaneousDownloads());
 				else
 					System.out.println("Need help? Just use the 'help' command!");
 				break;
