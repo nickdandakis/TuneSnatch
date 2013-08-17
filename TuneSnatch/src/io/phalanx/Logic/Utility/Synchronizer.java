@@ -1,3 +1,8 @@
+package io.phalanx.Logic.Utility;
+import io.phalanx.Data.UserProfile;
+import io.phalanx.Logic.Site;
+import io.phalanx.Logic.Scraping.HTML.HTML;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -55,16 +60,18 @@ public class Synchronizer {
 	}
 	
 	public static void printData(){
-		int i=0;
-		for(HTML html : data){
-			System.out.printf("[%d] %s - %s - %d\n", ++i, html.getSite().toString(), html.getArea(), html.getPagenumber());
-		}
 		if(data.size() == 0)
 			System.out.println("Not keeping track of anything. ");
+		else{
+			int i=0;
+			for(HTML html : data){
+				System.out.printf("[%d] %s - %s - %d\n", ++i, html.getSite().toString(), html.getArea(), html.getPagenumber());
+			}
+		}
 	}
 	
 	public static void clearData(){
-		data = new ArrayList<HTML>();
+		data.clear();
 		UserProfile.clearData(dataFile);
 	}
 	
@@ -72,10 +79,11 @@ public class Synchronizer {
 		System.out.println("Restoring sync data");
 		ArrayList<?> restoredObject = (ArrayList<?>) UserProfile.restoreData(dataFile);
 		ArrayList<HTML> checked = new ArrayList<HTML>();
+		data.clear();
 		
 		if(restoredObject != null) {
 			for(Object obj : restoredObject){
-				if(obj instanceof HTML)
+				if(obj instanceof HTML && obj != null)
 					checked.add((HTML) obj);
 			}
 			data = checked;

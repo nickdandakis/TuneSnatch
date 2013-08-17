@@ -1,3 +1,8 @@
+package io.phalanx.Logic.Scraping.HTML;
+
+
+import io.phalanx.Logic.Site;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 

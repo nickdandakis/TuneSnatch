@@ -1,3 +1,11 @@
+package io.phalanx.Logic;
+import io.phalanx.Logic.Scraping.Scraper;
+import io.phalanx.Logic.Scraping.HTML.HTML;
+import io.phalanx.Logic.Scraping.HTML.HypeMachineHTML;
+import io.phalanx.Logic.Scraping.HTML.MixcloudHTML;
+import io.phalanx.Logic.Scraping.HTML.SoundCloudHTML;
+import io.phalanx.Logic.Scraping.Track.TrackList;
+
 import java.util.concurrent.Callable;
 
 

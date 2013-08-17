@@ -1,3 +1,4 @@
+package io.phalanx.Logic.Scraping.Track;
 
 public class Track {
 

@@ -1,6 +1,9 @@
+package io.phalanx.Logic;
+import io.phalanx.Logic.Scraping.Track.Track;
+import io.phalanx.Logic.Utility.Downloader;
+
 import java.io.IOException;
 import java.util.concurrent.Callable;
-
 
 public class DownloadTask implements Callable<Boolean> {
 	

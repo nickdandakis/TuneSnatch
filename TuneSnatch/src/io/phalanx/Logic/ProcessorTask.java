@@ -1,3 +1,6 @@
+package io.phalanx.Logic;
+import io.phalanx.Logic.Scraping.HTML.HTML;
+
 import java.util.concurrent.Callable;
 
 public class ProcessorTask implements Callable<Boolean> {

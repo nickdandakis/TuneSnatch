@@ -1,3 +1,12 @@
+package io.phalanx.Logic;
+import io.phalanx.Data.UserProfile;
+import io.phalanx.Logic.Scraping.HTML.HTML;
+import io.phalanx.Logic.Scraping.HTML.HypeMachineHTML;
+import io.phalanx.Logic.Scraping.HTML.MixcloudHTML;
+import io.phalanx.Logic.Scraping.HTML.SoundCloudHTML;
+import io.phalanx.Logic.Scraping.Track.TrackList;
+import io.phalanx.Logic.Utility.Synchronizer;
+
 import java.io.IOException;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
@@ -44,9 +53,7 @@ public class Processor {
 				for(int i=1; i<=pages; i++){
 					tracklist.addTracks(scrapePool.take().get());
 				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
+			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
 		} else {
@@ -88,6 +95,14 @@ public class Processor {
 			}
 		}
 	}
+	
+	public void sync(HTML html){
+		Synchronizer.addHTML(html);
+		
+		printSyncList();
+		System.out.println("Execute a 'pull' command if you want to start downloading tracks");
+	}
+	
 	/*
 	 * Adds site/area and page(s) into the sync list.
 	 */
@@ -165,13 +180,21 @@ public class Processor {
 		System.out.print(ESC + "2J"); 
 	}
 	
-	public void changeDownloadDirectory(String path){
+	public void setDownloadDirectory(String path){
 		System.out.println("Setting new download directory path preference...");
 		UserProfile.setDownloadDirectory(path);
 	}
 
-	public void changeSimultaenousDownloads(String number) {
+	public void setSimultaenousDownloads(String number) {
 		System.out.println("Setting new simultaneous downloads limit preference...");
 		UserProfile.setSimultaneousDownloads(Integer.valueOf(number));
+	}
+	
+	public void getSimultaneouDownloads(){
+		System.out.printf("SIMULTANEOUS_DOWNLOADS = %d\n", UserProfile.getSimultaneousDownloads());
+	}
+	
+	public void getDownloadDirectory(){
+		System.out.printf("DOWNLOAD_DIRECTORY = %s\n", UserProfile.getDownloadDirectory());
 	}
 }

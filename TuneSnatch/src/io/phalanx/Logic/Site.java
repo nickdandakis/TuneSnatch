@@ -1,3 +1,4 @@
+package io.phalanx.Logic;
 
 public enum Site {
 	HypeMachine("http://hypem.com/", "HypeMachine"),
@@ -8,7 +9,7 @@ public enum Site {
 	private final String URL;
 	private final String name;
 	
-	static Site recognize(String string){
+	public static Site recognize(String string){
 		if(string.equalsIgnoreCase("HypeMachine"))
 			return HypeMachine;
 		else if(string.equalsIgnoreCase("SoundCloud"))
@@ -24,7 +25,7 @@ public enum Site {
 		this.name= name;
 	}
 	
-	String getURL(){
+	public String getURL(){
 		return URL;
 	}
 	

@@ -1,3 +1,8 @@
+package io.phalanx.Logic.Scraping.HTML;
+
+
+import io.phalanx.Logic.Site;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

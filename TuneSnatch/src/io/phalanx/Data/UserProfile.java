@@ -1,3 +1,4 @@
+package io.phalanx.Data;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -88,6 +89,11 @@ public class UserProfile {
 			ois.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found, making it now.");
+			try {
+				file.createNewFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -98,7 +104,7 @@ public class UserProfile {
 	}
 	
 	public static void clearData(File file){
-		saveData((Object) null, file);
+		file.delete();
 	}
 
 	

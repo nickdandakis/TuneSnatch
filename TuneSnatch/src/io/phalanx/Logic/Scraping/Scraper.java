@@ -1,3 +1,12 @@
+package io.phalanx.Logic.Scraping;
+import io.phalanx.Logic.Scraping.HTML.HypeMachineHTML;
+import io.phalanx.Logic.Scraping.HTML.MixcloudHTML;
+import io.phalanx.Logic.Scraping.HTML.SoundCloudHTML;
+import io.phalanx.Logic.Scraping.Track.HypeMachineTrack;
+import io.phalanx.Logic.Scraping.Track.MixcloudTrack;
+import io.phalanx.Logic.Scraping.Track.SoundCloudTrack;
+import io.phalanx.Logic.Scraping.Track.TrackList;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Scanner;

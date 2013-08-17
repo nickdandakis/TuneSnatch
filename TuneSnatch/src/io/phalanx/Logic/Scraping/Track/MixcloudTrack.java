@@ -1,3 +1,4 @@
+package io.phalanx.Logic.Scraping.Track;
 import java.io.IOException;
 
 import org.jsoup.Connection.Response;

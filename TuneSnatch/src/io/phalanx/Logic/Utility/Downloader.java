@@ -1,3 +1,7 @@
+package io.phalanx.Logic.Utility;
+import io.phalanx.Data.UserProfile;
+import io.phalanx.Logic.Scraping.Track.Track;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
