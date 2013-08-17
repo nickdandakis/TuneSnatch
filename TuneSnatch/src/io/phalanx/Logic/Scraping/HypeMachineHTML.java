@@ -1,4 +1,4 @@
-package io.phalanx.Logic.Scraping.HTML;
+package io.phalanx.Logic.Scraping;
 
 
 import io.phalanx.Logic.Site;

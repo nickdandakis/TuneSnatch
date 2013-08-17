@@ -1,8 +1,8 @@
 package io.phalanx.Presentation;
 
-import io.phalanx.Logic.Processor;
 import io.phalanx.Logic.Site;
-import io.phalanx.Logic.Scraping.HTML.HTML;
+import io.phalanx.Logic.Scraping.HTML;
+import io.phalanx.Logic.Utility.Processor;
 import io.phalanx.Logic.Utility.Synchronizer;
 
 import java.io.InputStream;

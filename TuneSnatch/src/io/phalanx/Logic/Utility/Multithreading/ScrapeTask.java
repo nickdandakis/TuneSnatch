@@ -1,10 +1,10 @@
-package io.phalanx.Logic;
+package io.phalanx.Logic.Utility.Multithreading;
+import io.phalanx.Logic.Scraping.HTML;
+import io.phalanx.Logic.Scraping.HypeMachineHTML;
+import io.phalanx.Logic.Scraping.MixcloudHTML;
 import io.phalanx.Logic.Scraping.Scraper;
-import io.phalanx.Logic.Scraping.HTML.HTML;
-import io.phalanx.Logic.Scraping.HTML.HypeMachineHTML;
-import io.phalanx.Logic.Scraping.HTML.MixcloudHTML;
-import io.phalanx.Logic.Scraping.HTML.SoundCloudHTML;
-import io.phalanx.Logic.Scraping.Track.TrackList;
+import io.phalanx.Logic.Scraping.SoundCloudHTML;
+import io.phalanx.Logic.Scraping.TrackList;
 
 import java.util.concurrent.Callable;
 

@@ -1,11 +1,15 @@
-package io.phalanx.Logic;
+package io.phalanx.Logic.Utility;
 import io.phalanx.Data.UserProfile;
-import io.phalanx.Logic.Scraping.HTML.HTML;
-import io.phalanx.Logic.Scraping.HTML.HypeMachineHTML;
-import io.phalanx.Logic.Scraping.HTML.MixcloudHTML;
-import io.phalanx.Logic.Scraping.HTML.SoundCloudHTML;
-import io.phalanx.Logic.Scraping.Track.TrackList;
-import io.phalanx.Logic.Utility.Synchronizer;
+import io.phalanx.Logic.Site;
+import io.phalanx.Logic.Scraping.HTML;
+import io.phalanx.Logic.Scraping.HypeMachineHTML;
+import io.phalanx.Logic.Scraping.MixcloudHTML;
+import io.phalanx.Logic.Scraping.SoundCloudHTML;
+import io.phalanx.Logic.Scraping.TrackList;
+import io.phalanx.Logic.Utility.Multithreading.DownloadTask;
+import io.phalanx.Logic.Utility.Multithreading.HTMLTask;
+import io.phalanx.Logic.Utility.Multithreading.ProcessorTask;
+import io.phalanx.Logic.Utility.Multithreading.ScrapeTask;
 
 import java.io.IOException;
 import java.util.concurrent.CompletionService;

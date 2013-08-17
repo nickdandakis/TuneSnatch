@@ -1,7 +1,7 @@
 package io.phalanx.Logic.Utility;
 import io.phalanx.Data.UserProfile;
 import io.phalanx.Logic.Site;
-import io.phalanx.Logic.Scraping.HTML.HTML;
+import io.phalanx.Logic.Scraping.HTML;
 
 import java.io.File;
 import java.util.ArrayList;

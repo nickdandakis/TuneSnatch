@@ -1,5 +1,6 @@
-package io.phalanx.Logic;
-import io.phalanx.Logic.Scraping.HTML.HTML;
+package io.phalanx.Logic.Utility.Multithreading;
+import io.phalanx.Logic.Scraping.HTML;
+import io.phalanx.Logic.Utility.Processor;
 
 import java.util.concurrent.Callable;
 

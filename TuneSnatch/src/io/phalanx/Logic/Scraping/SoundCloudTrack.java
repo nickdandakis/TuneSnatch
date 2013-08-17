@@ -1,4 +1,4 @@
-package io.phalanx.Logic.Scraping.Track;
+package io.phalanx.Logic.Scraping;
 
 public class SoundCloudTrack extends Track {
 	

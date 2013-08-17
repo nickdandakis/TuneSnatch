@@ -1,5 +1,5 @@
-package io.phalanx.Logic;
-import io.phalanx.Logic.Scraping.Track.Track;
+package io.phalanx.Logic.Utility.Multithreading;
+import io.phalanx.Logic.Scraping.Track;
 import io.phalanx.Logic.Utility.Downloader;
 
 import java.io.IOException;

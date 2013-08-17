@@ -1,4 +1,4 @@
-package io.phalanx.Logic.Scraping.Track;
+package io.phalanx.Logic.Scraping;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
