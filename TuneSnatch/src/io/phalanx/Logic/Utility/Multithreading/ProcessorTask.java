@@ -14,8 +14,7 @@ public class ProcessorTask implements Callable<Boolean> {
 
 	@Override
 	public Boolean call() throws Exception {
-		Processor processor = new Processor();
-		processor.download(html);
+		Processor.download(html);
 		
 		return true;
 	}

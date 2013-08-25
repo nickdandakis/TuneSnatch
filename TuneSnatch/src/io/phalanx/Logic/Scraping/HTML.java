@@ -96,7 +96,7 @@ public class HTML implements Serializable{
 	
 	@Override
 	public String toString(){
-		return String.format("Site: %s\nArea: %s\nPagenumber: %d",
+		return String.format("%s %s [%d]",
 								this.site, this.area, this.pagenumber);
 	}
 

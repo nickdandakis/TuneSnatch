@@ -12,6 +12,7 @@ import io.phalanx.Logic.Utility.Multithreading.ProcessorTask;
 import io.phalanx.Logic.Utility.Multithreading.ScrapeTask;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
@@ -22,24 +23,43 @@ import org.jsoup.HttpStatusException;
 
 public class Processor {
 	
-	ExecutorService threadPool = Executors.newFixedThreadPool(UserProfile.getSimultaneousDownloads());
-	CompletionService<TrackList> scrapePool = new ExecutorCompletionService<TrackList>(threadPool);
-	CompletionService<HTML> htmlPool = new ExecutorCompletionService<HTML>(threadPool);
-	CompletionService<Boolean> downloadPool = new ExecutorCompletionService<Boolean>(threadPool);
-	CompletionService<Boolean> processorPool = new ExecutorCompletionService<Boolean>(threadPool);
+	private static ExecutorService threadPool = Executors.newFixedThreadPool(UserProfile.getSimultaneousDownloads());
+	private static CompletionService<TrackList> scrapePool = new ExecutorCompletionService<TrackList>(threadPool);
+	private static CompletionService<HTML> htmlPool = new ExecutorCompletionService<HTML>(threadPool);
+	private static CompletionService<Boolean> downloadPool = new ExecutorCompletionService<Boolean>(threadPool);
+	private static CompletionService<Boolean> processorPool = new ExecutorCompletionService<Boolean>(threadPool);
 			
-	public Processor() {
+	static{
+		Synchronizer.restoreData();
+	}
+	private Processor() {
+		
 	}
 	
-	public void download (HTML html){
+	public static void download(String URL){
+		download(URL, "0");
+	}
+	
+	public static void download(String URL, String pagenumber){
+		HTML html = new HTML(URL);
+		html.setPagenumber(Integer.parseInt(pagenumber));
+		download(html);
+	}
+	
+	public static void download(HTML html){
 		download(html.getSite(), html.getArea(), String.valueOf(html.getPagenumber()));
 	}
 
+	public static void download(String site, String area, String pagenumber){
+		if(Site.recognize(site) != Site.Invalid)
+			download(Site.recognize(site), area, pagenumber);
+	}
+	
 	/*
 	 * Downloads all tracks from site/area and page(s) passed through.
 	 * 0 pages means to download all tracks from all pages.
 	 */
-	public void download(Site site, String area, String pagenumber) {
+	public static void download(Site site, String area, String pagenumber) {
 		int pages = Integer.parseInt(pagenumber);
 		TrackList tracklist = new TrackList();
 		HTML html = null;
@@ -57,9 +77,11 @@ public class Processor {
 				for(int i=1; i<=pages; i++){
 					tracklist.addTracks(scrapePool.take().get());
 				}
-			} catch (InterruptedException | ExecutionException e) {
+			} catch (InterruptedException  e) {
 				e.printStackTrace();
-			}
+			} catch (ExecutionException e1){
+                e1.printStackTrace();
+            }
 		} else {
 			try {
 				for(int i=1; ; i++){
@@ -94,25 +116,43 @@ public class Processor {
 		for(int i=0; i<tracklist.getSize(); i++){
 			try {
 				downloadPool.take().get();
-			} catch (InterruptedException | ExecutionException e) {
+				System.out.println("Finished");
+			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
+			} catch (ExecutionException e1){
+                e1.printStackTrace();
+            }
 		}
 	}
 	
-	public void sync(HTML html){
+	public static void sync(String URL){
+		sync(URL, "0");
+	}
+	
+	public static void sync(String URL, String pagenumber){
+		HTML html = new HTML(URL);
+		html.setPagenumber(Integer.parseInt(pagenumber));
+		sync(html);
+	}
+	
+	public static void sync(HTML html){
 		Synchronizer.addHTML(html);
 		
 		printSyncList();
 		System.out.println("Execute a 'pull' command if you want to start downloading tracks");
 	}
 	
+	public static void sync(String site, String area, String page){
+		if(Site.recognize(site) != Site.Invalid)
+			sync(Site.recognize(site), area, page);
+	}
+	
 	/*
 	 * Adds site/area and page(s) into the sync list.
 	 */
-	public void sync(Site site, String area, String page){
+	public static void sync(Site site, String area, String page){
 		int pages = Integer.valueOf(page);
-		HTML html = null;
+		HTML html;
 		
 		html = new HTML(area, pages);
 		html.setSite(site);
@@ -122,10 +162,15 @@ public class Processor {
 		System.out.println("Execute a 'pull' command if you want to start downloading tracks");
 	}
 	
+	public static void unsync(String site, String area, String page){
+		if(Site.recognize(site) != Site.Invalid)
+			unsync(Site.recognize(site), area, page);
+	}
+	
 	/*
 	 * Removes site/area and pages from the sync list
 	 */
-	public void unsync(Site site, String area, String page){
+	public static void unsync(Site site, String area, String page){
 		int pages = Integer.parseInt(page);
 		
 		for(HTML html : Synchronizer.getSyncdata()){
@@ -133,7 +178,6 @@ public class Processor {
 					((site == Site.HypeMachine && html.getSite() == Site.HypeMachine) ||
 							(site == Site.SoundCloud && html.getSite() == Site.SoundCloud) ||
 								(site == Site.Mixcloud && html.getSite() == Site.Mixcloud))){
-				System.out.println("Conditions met");
 				Synchronizer.removeHTML(html);
 				break;
 			}
@@ -142,7 +186,7 @@ public class Processor {
 		printSyncList();
 	}
 	
-	public void unsync(int index){
+	public static void unsync(int index){
 		Synchronizer.removeHTML(--index); // Sync list is displayed to user with start index as 1 (not 0)
 		printSyncList();
 	}
@@ -151,7 +195,7 @@ public class Processor {
 	 * Downloads new tracks from site(s)/area(s) in sync list.
 	 * Downloader object avoids downloading already downloaded tracks.
 	 */
-	public void pull(){
+	public static void pull(){
 		for(HTML html : Synchronizer.getSyncdata()){
 			System.out.println("Submit");
 			processorPool.submit(new ProcessorTask(html));
@@ -160,45 +204,51 @@ public class Processor {
 		for(@SuppressWarnings("unused") HTML html : Synchronizer.getSyncdata()){
 			try {
 				processorPool.take().get();
-			} catch (InterruptedException | ExecutionException e) {
+			} catch (InterruptedException  e) {
 				e.printStackTrace();
-			}
+			} catch (ExecutionException e1){
+                e1.printStackTrace();
+            }
 		}
 	}
 	
-	public void printNewtracks() { // TODO
+	public static ArrayList<HTML> getSyncList(){
+		return Synchronizer.getSyncdata();
+	}
+	
+	public static void printNewtracks() { // TODO
 		System.out.println("IMMA PRINT ALL DA TRACKS!");
 	}
 	
-	public void printSyncList() {
+	public static void printSyncList() {
 		Synchronizer.printData();
 	}
 	
-	public void clearSyncList(){
+	public static void clearSyncList(){
 		Synchronizer.clearData();
 	}
 	
 	// TODO Only works for UNIX 
-	public void clear(){
+	public static void clear(){
 		final String ESC = "\033[";
 		System.out.print(ESC + "2J"); 
 	}
 	
-	public void setDownloadDirectory(String path){
+	public static void setDownloadDirectory(String path){
 		System.out.println("Setting new download directory path preference...");
 		UserProfile.setDownloadDirectory(path);
 	}
 
-	public void setSimultaenousDownloads(String number) {
+	public static void setSimultaneouslyDownloads(String number) {
 		System.out.println("Setting new simultaneous downloads limit preference...");
 		UserProfile.setSimultaneousDownloads(Integer.valueOf(number));
 	}
 	
-	public void getSimultaneouDownloads(){
+	public static void getSimultaneouDownloads(){
 		System.out.printf("SIMULTANEOUS_DOWNLOADS = %d\n", UserProfile.getSimultaneousDownloads());
 	}
 	
-	public void getDownloadDirectory(){
+	public static void getDownloadDirectory(){
 		System.out.printf("DOWNLOAD_DIRECTORY = %s\n", UserProfile.getDownloadDirectory());
 	}
 }
